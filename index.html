@@ -133,7 +133,7 @@
                     </div>
                     <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card0-title">Nótaí Athbhreithnithe</h3>
                     <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card0-desc">
-                        Nótaí cuimsitheacha ar gach caibidil. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.
+                        Nótaí cuimsitheacha ar gach caibidil le leathanaigh tiomnaithe. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.
                     </p>
                     <div class="pt-2 flex items-center text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition">
                         <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
@@ -196,7 +196,7 @@
                     </span>
                     <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="notes-title">Nótaí Staidéir na hArdteiste</h1>
                     <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="notes-desc">
-                        Roghnaigh ábhar le liosta de na caibidlí go léir a fheiceáil agus ábhar athbhreithnithe iomlán a fháil.
+                        Roghnaigh caibidil thíos chun leathanach tiomnaithe na caibidle sin a oscailt le go leor spáis do do chuid nótaí.
                     </p>
                 </div>
             </div>
@@ -220,9 +220,55 @@
                 </div>
             </div>
 
-            <!-- Chapters Accordion Container -->
-            <div id="notes-chapters-container" class="space-y-4">
-                <!-- Chapters dynamic accordion HTML -->
+            <!-- Chapters List Container (Clicking opens dedicated chapter page view) -->
+            <div id="notes-chapters-container" class="space-y-3">
+                <!-- Dynamic chapter rows -->
+            </div>
+        </section>
+
+        <!-- TAB: DEDICATED CHAPTER DETAIL VIEW (Extra Page per Chapter) -->
+        <section id="tab-chapter-detail" class="tab-content hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchTab('notes')" class="inline-flex items-center text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-100 px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> <span data-i18n="back-to-notes">Ar Ais chuig na Nótaí</span>
+                </button>
+                <span id="chapter-badge-subject" class="bg-brand-100 text-brand-800 text-xs font-bold px-3 py-1.5 rounded-xl border border-brand-200">Bitheolaíocht - Aonad 2</span>
+            </div>
+
+            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-sm space-y-8">
+                <!-- Chapter Header -->
+                <div class="border-b border-slate-100 pb-6 space-y-2">
+                    <span id="chapter-detail-number" class="text-xs font-extrabold text-brand-600 uppercase tracking-widest">Caibidil</span>
+                    <h1 id="chapter-detail-title" class="text-2xl sm:text-4xl font-extrabold text-slate-900"></h1>
+                    <p id="chapter-detail-subtitle" class="text-sm sm:text-base text-slate-500 font-medium"></p>
+                </div>
+
+                <!-- Main Comprehensive Content Space -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-book-open-reader text-brand-600 mr-2"></i> <span data-i18n="notes-comprehensive">Nótaí Cuimsitheacha & Mionsonraí</span>
+                    </h3>
+                    <div id="chapter-detail-points" class="space-y-3">
+                        <!-- Dynamic rich points -->
+                    </div>
+                </div>
+
+                <!-- Personal Scratchpad / Notes Section -->
+                <div class="pt-6 border-t border-slate-100 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> <span data-i18n="student-notes-heading">Do Chuid Nótaí Féin / Smaointe Scrúdaithe</span>
+                        </h3>
+                        <span class="text-xs text-slate-400 font-medium" data-i18n="auto-saved">Sábháladh go huathoibríoch ar an ngléas seo</span>
+                    </div>
+                    <textarea id="student-chapter-notes" rows="6" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition" placeholder="Scríobh do chuid nótaí féin, sainmhínithe breise nó cleachtaí anseo..."></textarea>
+                    <div class="flex justify-end">
+                        <button onclick="saveStudentNotes()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition flex items-center space-x-2">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span data-i18n="save-notes">Sábháil Nótaí</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -418,7 +464,7 @@
                 "hero-btn-notes": "Déan Staidéar ar Nótaí",
                 "hero-btn-calc": "Áireamhán CAO",
                 "card0-title": "Nótaí Athbhreithnithe",
-                "card0-desc": "Nótaí cuimsitheacha ar gach caibidil. Cuirmsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.",
+                "card0-desc": "Nótaí cuimsitheacha ar gach caibidil le leathanaigh tiomnaithe. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.",
                 "card1-title": "Tobar Ceisteanna",
                 "card1-desc": "Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.",
                 "card2-title": "Cartlann SEC (2015-2024)",
@@ -427,8 +473,13 @@
                 "card3-desc": "Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.",
                 "card-explore": "Achoimre",
                 "notes-title": "Nótaí Staidéir na hArdteiste",
-                "notes-desc": "Roghnaigh ábhar le liosta de na caibidlí go léir a fheiceáil agus ábhar athbhreithnithe iomlán a fháil.",
+                "notes-desc": "Roghnaigh caibidil thíos chun leathanach tiomnaithe na caibidle sin a oscailt le go leor spáis do do chuid nótaí.",
                 "notes-select-subject": "Roghnaigh Ábhar",
+                "back-to-notes": "Ar Ais chuig na Nótaí",
+                "notes-comprehensive": "Nótaí Cuimsitheacha & Mionsonraí",
+                "student-notes-heading": "Do Chuid Nótaí Féin / Smaointe Scrúdaithe",
+                "auto-saved": "Sábháladh go huathoibríoch ar an ngléas seo",
+                "save-notes": "Sábháil Nótaí",
                 "qbank-title": "Tobar Ceisteanna na hArdteiste",
                 "qbank-desc": "Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.",
                 "sec-title": "Páipéir & Scéimeanna Marcála",
@@ -466,7 +517,7 @@
                 "hero-btn-notes": "Study Revision Notes",
                 "hero-btn-calc": "CAO Calculator",
                 "card0-title": "Revision Notes",
-                "card0-desc": "Comprehensive revision notes by chapter. Includes full Unit 2 for Leaving Cert Biology.",
+                "card0-desc": "Comprehensive revision notes with dedicated pages for every chapter. Includes full Unit 2 for Leaving Cert Biology.",
                 "card1-title": "Question Bank",
                 "card1-desc": "Study exam questions by topic and subject with integrated marking schemes.",
                 "card2-title": "SEC Archive (2015-2024)",
@@ -475,8 +526,13 @@
                 "card3-desc": "Calculate your CAO points quickly including Higher Level Maths bonus points.",
                 "card-explore": "Explore",
                 "notes-title": "Leaving Cert Study Notes",
-                "notes-desc": "Select a subject to expand chapters and access complete revision content.",
+                "notes-desc": "Select a chapter below to open its dedicated page with plenty of space for your revision notes.",
                 "notes-select-subject": "Select Subject",
+                "back-to-notes": "Back to Notes",
+                "notes-comprehensive": "Comprehensive Notes & Key Details",
+                "student-notes-heading": "Your Personal Notes / Exam Thoughts",
+                "auto-saved": "Auto-saves locally on this device",
+                "save-notes": "Save Notes",
                 "qbank-title": "Leaving Cert Question Bank",
                 "qbank-desc": "Search exam questions by subject or key topic.",
                 "sec-title": "Exam Papers & Marking Schemes",
@@ -558,7 +614,7 @@
                 keyPointsGa: [
                     '<strong>Einsím:</strong> Bithchatalaíoch próitéine a ghéaraíonn ráta imoibrithe ceimicigh gan é féin a úsáid.',
                     '<strong>An Láthair Ghníomhach (Active Site):</strong> An chuid den einsím a nascann leis an tsubstaint (Múnla Oiriúnaithe Ghníomhaigh / Induced Fit Model).',
-                    '<strong>Dínádúrú (Denaturation):</strong> Cailliúint crutha tríthoiseach na heinsíme ionas nach féidir léi feidhmiú a thuilleadh (mar gheall ar theocht ard nó pH mí-oiriúnach).',
+                    '<strong>Dínádúrú (Denaturation):</strong> Cailliúint crutha trithoiseach na heinsíme ionas nach féidir léi feidhmiú a thuilleadh (mar gheall ar theocht ard nó pH mí-oiriúnach).',
                     '<strong>Einsímí Inslithe (Immobilised Enzymes):</strong> Einsímí atá ceangailte nó faoi ghlas i n-ábhar neamhghníomhach (M.sh., Ailgináit Sodiama le haghaidh Giosta). Athúsáidte go héasca ar scála tionsclaíoch.'
                 ],
                 keyPointsEn: [
@@ -724,8 +780,11 @@
                 }
             });
 
-            // Re-render dynamic notes content with new language
+            // Re-render dynamic notes list or active detail view if open
             renderSubjectNotes();
+            if (window.currentActiveChapterId) {
+                openChapterDetail(window.currentActiveChapterId);
+            }
         }
 
         // TAB SWITCHING LOGIC
@@ -746,9 +805,10 @@
             if (tabId === 'notes') renderSubjectNotes();
             if (tabId === 'sec') fetchSecPapersFromSupabase();
             if (tabId === 'qbank') fetchQuestionsFromSupabase();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // RENDER NOTES SECTION
+        // RENDER NOTES LIST (Clicking a card opens its dedicated extra page view)
         function renderSubjectNotes() {
             const subject = document.getElementById('notes-subject-select').value;
             const container = document.getElementById('notes-chapters-container');
@@ -758,26 +818,19 @@
                 
                 container.innerHTML = biologyUnit2Data.map((item, index) => {
                     const title = currentLang === 'ga' ? item.titleGa : item.titleEn;
-                    const points = currentLang === 'ga' ? item.keyPointsGa : item.keyPointsEn;
 
                     return `
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition">
-                        <button onclick="toggleChapterAccordion('${item.id}')" class="w-full text-left p-4 sm:p-5 hover:bg-slate-50 flex items-center justify-between transition focus:outline-none">
-                            <div class="flex items-center space-x-3 pr-2">
-                                <span class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs flex-shrink-0">${index + 1}</span>
-                                <div>
-                                    <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">${title}</h3>
-                                    <p class="text-[11px] sm:text-xs text-slate-500">${item.subtitle}</p>
-                                </div>
+                    <div onclick="openChapterDetail('${item.id}')" class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/85 shadow-sm hover:shadow-md hover:border-brand-400 transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center space-x-4 pr-2">
+                            <span class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-700 flex items-center justify-center font-extrabold text-sm flex-shrink-0 group-hover:bg-brand-600 group-hover:text-white transition">${index + 1}</span>
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-brand-700 transition">${title}</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">${item.subtitle}</p>
                             </div>
-                            <i id="icon-${item.id}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200 flex-shrink-0"></i>
-                        </button>
-
-                        <div id="content-${item.id}" class="hidden p-4 sm:p-6 border-t border-slate-100 bg-slate-50/50 space-y-3">
-                            <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">${currentLang === 'ga' ? 'Achoimre Bheo & Pointí Athbhreithnithe' : 'Key Revision Summary'}</h4>
-                            <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
-                                ${points.map(pt => `<li class="bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">${pt}</li>`).join('')}
-                            </ul>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs font-bold text-brand-600 bg-brand-50 px-3 py-2 rounded-xl group-hover:bg-brand-600 group-hover:text-white transition flex-shrink-0">
+                            <span class="hidden sm:inline">${currentLang === 'ga' ? 'Féach ar Nótaí' : 'View Notes'}</span>
+                            <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                     `;
@@ -785,17 +838,43 @@
             }
         }
 
-        function toggleChapterAccordion(id) {
-            const content = document.getElementById(`content-${id}`);
-            const icon = document.getElementById(`icon-${id}`);
-            
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.classList.add('rotate-180');
-            } else {
-                content.classList.add('hidden');
-                icon.classList.remove('rotate-180');
-            }
+        // OPEN INDIVIDUAL CHAPTER EXTRA PAGE VIEW
+        function openChapterDetail(id) {
+            const chapter = biologyUnit2Data.find(c => c.id === id);
+            if (!chapter) return;
+            window.currentActiveChapterId = id;
+
+            const title = currentLang === 'ga' ? chapter.titleGa : chapter.titleEn;
+            const points = currentLang === 'ga' ? chapter.keyPointsGa : chapter.keyPointsEn;
+
+            document.getElementById('chapter-detail-title').innerText = title;
+            document.getElementById('chapter-detail-subtitle').innerText = chapter.subtitle;
+            document.getElementById('chapter-detail-number').innerText = `${currentLang === 'ga' ? 'Caibidil' : 'Chapter'} — ${id.toUpperCase()}`;
+
+            const pointsContainer = document.getElementById('chapter-detail-points');
+            pointsContainer.innerHTML = points.map(pt => `
+                <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/70 leading-relaxed text-slate-700 text-sm sm:text-base">
+                    ${pt}
+                </div>
+            `).join('');
+
+            // Load saved student notes from localStorage if present
+            const savedNote = localStorage.getItem(`scolaire_note_${id}`) || '';
+            document.getElementById('student-chapter-notes').value = savedNote;
+
+            // Switch view to dedicated chapter detail section
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-chapter-detail').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // SAVE PERSONAL CHAPTER NOTES LOCALLY
+        function saveStudentNotes() {
+            const id = window.currentActiveChapterId;
+            if (!id) return;
+            const text = document.getElementById('student-chapter-notes').value;
+            localStorage.setItem(`scolaire_note_${id}`, text);
+            alert(currentLang === 'ga' ? 'Sábháladh do chuid nótaí go rathúil ar an ngléas seo!' : 'Your personal notes were saved successfully on this device!');
         }
 
         // SUPABASE QUESTION BANK FETCHING
