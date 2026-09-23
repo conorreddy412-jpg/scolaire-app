@@ -4,38 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoláire | Áiseanna Staidéir don Ardteistiméireacht</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
+                            50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e',
+                            600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d'
                         }
                     }
                 }
             }
         }
     </script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header Navigation -->
+    <!-- Navigation Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -48,7 +41,6 @@
                     </span>
                 </div>
 
-                <!-- Navigation Tabs -->
                 <nav class="flex space-x-1 sm:space-x-4">
                     <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition bg-brand-50 text-brand-700">
                         <i class="fa-solid fa-book-open mr-1"></i> Ceisteanna
@@ -56,90 +48,60 @@
                     <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900">
                         <i class="fa-solid fa-file-pdf mr-1"></i> Cartlann SEC
                     </button>
-                    <button id="nav-bealtriail" onclick="switchTab('bealtriail')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900">
-                        <i class="fa-solid fa-comments mr-1"></i> Béaltriail
-                    </button>
-                    <button id="nav-flashcards" onclick="switchTab('flashcards')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900">
-                        <i class="fa-solid fa-layer-group mr-1"></i> Flashcards
-                    </button>
                 </nav>
-
-                <!-- Language / Controls -->
-                <div class="flex items-center space-x-2">
-                    <button onclick="toggleLanguage()" id="lang-toggle" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 font-semibold transition">
-                        EN
-                    </button>
-                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- TAB 1: QUESTION BANK -->
+        <!-- TAB 1: QUESTION BANK (SUPABASE) -->
         <section id="tab-qbank" class="tab-content space-y-6">
-            <div class="bg-brand-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
-                    <h1 class="text-2xl sm:text-3xl font-bold mb-2">Tobar Ceisteanna na hArdteiste</h1>
-                    <p class="text-brand-100 text-sm sm:text-base">Aimsigh ceisteanna scrúduithe de réir ábhair, téama, agus leibhéil i nGaeilge le scéimeanna marcála comhfhreagracha.</p>
-                </div>
+            <div class="bg-brand-900 text-white p-6 rounded-2xl shadow-lg">
+                <span class="bg-brand-500/20 text-brand-300 text-xs px-2.5 py-1 rounded-full border border-brand-500/30 font-semibold mb-2 inline-block">
+                    <i class="fa-solid fa-database mr-1"></i> Live Supabase DB
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-bold">Tobar Ceisteanna na hArdteiste</h1>
+                <p class="text-brand-100 text-sm mt-1">Ceisteanna curtha in eagar de réir ábhair agus téama i nGaeilge.</p>
             </div>
 
-            <!-- Subject & Filter Controls -->
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Question Filters -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Ábhar (Subject)</label>
-                    <select id="filter-subject" onchange="filterQuestions()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Ábhar</label>
+                    <select id="q-subject" onchange="fetchQuestionsFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
                         <option value="all">Gach Ábhar</option>
-                        <option value="Bitheolaíocht">Bitheolaíocht (Biology)</option>
-                        <option value="Matamaitic">Matamaitic (Maths)</option>
-                        <option value="Tíreolaíocht">Tíreolaíocht (Geography)</option>
+                        <option value="Bitheolaíocht">Bitheolaíocht</option>
+                        <option value="Matamaitic">Matamaitic</option>
+                        <option value="Tíreolaíocht">Tíreolaíocht</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Téama (Topic)</label>
-                    <select id="filter-topic" onchange="filterQuestions()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
-                        <option value="all">Gach Téama</option>
-                        <option value="Fótasintéisiú">Fótasintéisiú</option>
-                        <option value="Ailgéabar">Ailgéabar</option>
-                        <option value="Pláta-Thachtónacht">Pláta-Thachtónacht</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Cearchra (Search)</label>
-                    <input type="text" id="search-q" oninput="filterQuestions()" placeholder="Cuardaigh ceisteanna..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Cuardaigh (Search)</label>
+                    <input type="text" id="q-search" oninput="fetchQuestionsFromSupabase()" placeholder="Cuardaigh ceisteanna..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
                 </div>
             </div>
 
-            <!-- Questions Output Container -->
             <div id="questions-container" class="space-y-4">
-                <!-- Dynamically populated via JS -->
+                <div class="text-center py-8 text-slate-400">Ag lódáil ceisteanna...</div>
             </div>
         </section>
 
-        <!-- TAB 2: SEC ARCHIVE (Direct Links to State Exam PDFs) -->
+        <!-- TAB 2: SEC ARCHIVE (SUPABASE) -->
         <section id="tab-sec" class="tab-content hidden space-y-6">
             <div class="bg-slate-800 text-white p-6 rounded-2xl shadow-lg">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <span class="bg-red-500/20 text-red-300 text-xs px-2.5 py-1 rounded-full border border-red-500/30 font-semibold mb-2 inline-block">
-                            Oifigiúil SEC
-                        </span>
-                        <h1 class="text-2xl sm:text-3xl font-bold">Cartlann Páipéir Scrúduithe SEC</h1>
-                        <p class="text-slate-300 text-sm mt-1">Naisc dhíreacha chuig Páipéir Scrúduithe agus Scéimeanna Marcála i nGaeilge ó Choimisiún na Scrúduithe Stáit.</p>
-                    </div>
-                    <a href="https://www.examinations.ie/exammaterialarchive/" target="_blank" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center justify-center transition">
-                        <i class="fa-solid fa-external-link mr-2"></i> examinations.ie Archive
-                    </a>
-                </div>
+                <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 font-semibold mb-2 inline-block">
+                    <i class="fa-solid fa-database mr-1"></i> Live Supabase DB
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-bold">Cartlann Páipéir Scrúduithe SEC</h1>
+                <p class="text-slate-300 text-sm mt-1">Páipéir agus Scéimeanna Marcála á lódáil ó do bhunachar sonraí.</p>
             </div>
 
-            <!-- SEC Search & Filters -->
+            <!-- PDF Archive Filters -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 mb-1">Ábhar</label>
-                    <select id="sec-subject" onchange="renderSecArchive()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
                         <option value="all">Gach Ábhar</option>
                         <option value="Bitheolaíocht">Bitheolaíocht</option>
                         <option value="Matamaitic">Matamaitic</option>
@@ -148,8 +110,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Bliain (Year)</label>
-                    <select id="sec-year" onchange="renderSecArchive()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Bliain</label>
+                    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
                         <option value="all">Gach Bliain</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
@@ -157,8 +119,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Leibhéal (Level)</label>
-                    <select id="sec-level" onchange="renderSecArchive()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Leibhéal</label>
+                    <select id="sec-level" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
                         <option value="all">Ardleibhéal & Gnáthleibhéal</option>
                         <option value="Ardleibhéal">Ardleibhéal (HL)</option>
                         <option value="Gnáthleibhéal">Gnáthleibhéal (OL)</option>
@@ -166,60 +128,8 @@
                 </div>
             </div>
 
-            <!-- SEC PDF Downloads List -->
             <div id="sec-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </section>
-
-        <!-- TAB 3: BÉALT RIAIL PRACTICE -->
-        <section id="tab-bealtriail" class="tab-content hidden space-y-6">
-            <div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-lg">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-2">Sraith Pictiúr & Béaltriail</h1>
-                <p class="text-indigo-200 text-sm">Ullmhaigh don Bhéaltriail Gaeilge le hscriptanna samplacha, fuaimniú, agus stór focal níos airde.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-bold">Sraith 1</span>
-                    <button onclick="speakText()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center transition">
-                        <i class="fa-solid fa-volume-high mr-1.5"></i> Éist le Fuaim
-                    </button>
-                </div>
-                <h2 class="text-xl font-bold text-slate-900">Turas Scoile go dti an Ghaeltacht</h2>
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-slate-700 text-sm leading-relaxed" id="speech-text">
-                    Lá breá gréine a bhí ann i dtús mhí Mheán Fómhair. Bhí na daltaí go léir ar bís mar go raibh siad ag dul ar thuras scoile go dtí Gaeltacht Chorca Dhuibhne.
-                </div>
-                <div class="pt-2">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stór Focal Níos Airde (Vocabulary)</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-medium">Ar bís (Excited)</span>
-                        <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-medium">Lá breá gréine (Sunny day)</span>
-                        <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-medium">Radharc na tíre (Scenery)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: FLASHCARDS -->
-        <section id="tab-flashcards" class="tab-content hidden space-y-6">
-            <div class="bg-emerald-900 text-white p-6 rounded-2xl shadow-lg text-center">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-2">Flashcards Téarmaíochta</h1>
-                <p class="text-emerald-200 text-sm">Nasc na téarmaí Gaeilge lena gciall le haghaidh scrúduithe na hArdteiste.</p>
-            </div>
-
-            <!-- Flashcard Flip Box -->
-            <div class="max-w-md mx-auto">
-                <div id="flashcard" onclick="flipCard()" class="bg-white border-2 border-emerald-500 rounded-2xl p-8 shadow-md h-64 flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 text-center select-none hover:shadow-lg">
-                    <span id="fc-category" class="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-2">Bitheolaíocht</span>
-                    <h3 id="fc-content" class="text-2xl font-bold text-slate-800">Fótasintéisiú</h3>
-                    <p id="fc-hint" class="text-xs text-slate-400 mt-4">(Cliceáil chun an sainmhíniú a fheiceáil)</p>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <button onclick="prevCard()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold">Siar (Prev)</button>
-                    <span id="card-counter" class="text-xs text-slate-500 font-semibold">1 / 3</span>
-                    <button onclick="nextCard()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-xs font-semibold">Ar aghaidh (Next)</button>
-                </div>
+                <div class="col-span-full text-center py-8 text-slate-400">Ag lódáil sonraí...</div>
             </div>
         </section>
 
@@ -228,74 +138,46 @@
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
-            <p>&copy; 2026 Scoláire. Áiseanna Staidéir don Ardteist trí Ghaeilge.</p>
-            <p class="text-slate-500">Maoinithe ag do spriocanna foghlama féin. Naisc SEC ag pointeáil chuig examinations.ie Archive.</p>
+            <p>&copy; 2026 Scoláire. Áiseanna Staidéir don Ardteistiméireacht.</p>
         </div>
     </footer>
 
-    <!-- JavaScript Logic -->
     <script>
-        // Data Store
-        const questions = [
-            {
-                id: 1,
-                subject: 'Bitheolaíocht',
-                topic: 'Fótasintéisiú',
-                level: 'Ardleibhéal',
-                year: '2023',
-                title: 'Ceist 7 (a) - Céim Spleách ar Solas',
-                body: 'Sainmhínigh an próiseas fótasintéise agus tabhair an chothromóid cheimiceach chothromaithe dó.',
-                marking: 'Sainmhíniú: Conversiún fuinnimh solais go fuinneamh ceimiceach (3M).\nCothromóid: 6CO2 + 6H2O -> C6H12O6 + 6O2 (3M).'
-            },
-            {
-                id: 2,
-                subject: 'Matamaitic',
-                topic: 'Ailgéabar',
-                level: 'Ardleibhéal',
-                year: '2024',
-                title: 'Ceist 2 (b) - Cothromóidí Feidhmiúla',
-                body: 'Réitigh an chothromóid quadratic seo a leanas: x² - 5x + 6 = 0.',
-                marking: '(x - 2)(x - 3) = 0\nFachtóirí i gceart (5M)\nx = 2, x = 3 (5M).'
-            },
-            {
-                id: 3,
-                subject: 'Tíreolaíocht',
-                topic: 'Pláta-Thachtónacht',
-                level: 'Ardleibhéal',
-                year: '2022',
-                title: 'Ceist 1 (c) - Teorainneacha Comhréiteacha',
-                body: 'Mínigh conas a fhoirmítear sléibhte fillte ag teorainneacha pláta comhréiteacha.',
-                marking: 'Míniú ar imbhualadh plátaí (10M), sampla (m.sh. Na Hímiléithe) luaite i gceart (5M).'
-            }
-        ];
+        // LIVE SUPABASE CREDENTIALS
+        const SUPABASE_URL = 'https://mwsnsnrgapaulessilsa.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_GLTAwJG8YnmRDLylbwBQiw_rPeTrROk';
 
-        const secArchive = [
-            { subject: 'Bitheolaíocht', year: '2024', level: 'Ardleibhéal', paperUrl: 'https://www.examinations.ie/archive/exampapers/2024/LC025ALP000IV.pdf', msUrl: 'https://www.examinations.ie/archive/markingschemes/2024/LC025EV.pdf' },
-            { subject: 'Matamaitic', year: '2024', level: 'Ardleibhéal', paperUrl: 'https://www.examinations.ie/archive/exampapers/2024/LC003ALP100IV.pdf', msUrl: 'https://www.examinations.ie/archive/markingschemes/2024/LC003EV.pdf' },
-            { subject: 'Tíreolaíocht', year: '2023', level: 'Ardleibhéal', paperUrl: 'https://www.examinations.ie/archive/exampapers/2023/LC022ALP000IV.pdf', msUrl: 'https://www.examinations.ie/archive/markingschemes/2023/LC022EV.pdf' },
-            { subject: 'Gaeilge', year: '2024', level: 'Ardleibhéal', paperUrl: 'https://www.examinations.ie/archive/exampapers/2024/LC001ALP100IV.pdf', msUrl: 'https://www.examinations.ie/archive/markingschemes/2024/LC001EV.pdf' }
-        ];
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const flashcardList = [
-            { category: 'Bitheolaíocht', term: 'Fótasintéisiú', def: 'An próiseas ina n-úsáideann plandaí solas na gréine chun bia a dhéanamh.' },
-            { category: 'Matamaitic', term: 'Cothromóid Cheathairshíosach', def: 'Cothromóid san fhoirm ax² + bx + c = 0.' },
-            { category: 'Tíreolaíocht', term: 'Manntal', def: 'An ciseal inmheánach den Domhan atá suite faoin screamh.' }
-        ];
-
-        let currentCardIdx = 0;
-        let isFlipped = false;
-
-        // Render Functions
-        function renderQuestions(data) {
+        // Load Topic Questions from Supabase
+        async function fetchQuestionsFromSupabase() {
+            const subject = document.getElementById('q-subject').value;
+            const search = document.getElementById('q-search').value.toLowerCase();
             const container = document.getElementById('questions-container');
-            container.innerHTML = '';
 
-            if (data.length === 0) {
+            let query = _supabase.from('exam_questions').select('*');
+            if (subject !== 'all') query = query.eq('subject', subject);
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error("Supabase Error:", error);
+                container.innerHTML = `<div class="p-4 bg-red-50 text-red-600 rounded-xl">Error loading questions from database. Ensure SQL table 'exam_questions' exists.</div>`;
+                return;
+            }
+
+            const filtered = data.filter(q => 
+                q.title.toLowerCase().includes(search) || 
+                q.question_text.toLowerCase().includes(search)
+            );
+
+            if (filtered.length === 0) {
                 container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-xl border border-slate-200">Ní bhfuarthas aon cheist faoin gcritéar seo.</div>`;
                 return;
             }
 
-            data.forEach(q => {
+            container.innerHTML = '';
+            filtered.forEach(q => {
                 container.innerHTML += `
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
                         <div class="flex justify-between items-start">
@@ -307,39 +189,46 @@
                             <span class="text-xs text-slate-400 font-medium">${q.level}</span>
                         </div>
                         <h3 class="text-base font-bold text-slate-800">${q.title}</h3>
-                        <p class="text-sm text-slate-600">${q.body}</p>
+                        <p class="text-sm text-slate-600">${q.question_text}</p>
                         <button onclick="toggleMarking(${q.id})" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center pt-2">
                             <i class="fa-solid fa-square-check mr-1"></i> Taispeáin Scéim Marcála
                         </button>
                         <div id="ms-${q.id}" class="hidden p-3 bg-brand-50 border border-brand-200 rounded-lg text-xs font-mono text-brand-900 whitespace-pre-line mt-2">
-                            ${q.marking}
+                            ${q.marking_scheme_text}
                         </div>
                     </div>
                 `;
             });
         }
 
-        function renderSecArchive() {
+        // Load Full SEC Papers from Supabase
+        async function fetchSecPapersFromSupabase() {
             const subject = document.getElementById('sec-subject').value;
             const year = document.getElementById('sec-year').value;
             const level = document.getElementById('sec-level').value;
-
-            const filtered = secArchive.filter(item => {
-                const matchSub = subject === 'all' || item.subject === subject;
-                const matchYr = year === 'all' || item.year === year;
-                const matchLvl = level === 'all' || item.level === level;
-                return matchSub && matchYr && matchLvl;
-            });
-
             const container = document.getElementById('sec-list');
-            container.innerHTML = '';
 
-            if (filtered.length === 0) {
+            let query = _supabase.from('sec_papers').select('*');
+
+            if (subject !== 'all') query = query.eq('subject', subject);
+            if (year !== 'all') query = query.eq('year', parseInt(year));
+            if (level !== 'all') query = query.eq('level', level);
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error("Supabase Error:", error);
+                container.innerHTML = `<div class="col-span-full p-4 bg-red-50 text-red-600 rounded-xl">Error loading SEC papers. Ensure SQL table 'sec_papers' exists.</div>`;
+                return;
+            }
+
+            if (!data || data.length === 0) {
                 container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 bg-white rounded-xl border border-slate-200">Aon náisc faighte.</div>`;
                 return;
             }
 
-            filtered.forEach(item => {
+            container.innerHTML = '';
+            data.forEach(item => {
                 container.innerHTML += `
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
                         <div>
@@ -347,31 +236,16 @@
                             <p class="text-xs text-slate-500">${item.level} • Léiriú Gaeilge</p>
                         </div>
                         <div class="flex space-x-2">
-                            <a href="${item.paperUrl}" target="_blank" class="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center transition">
+                            <a href="${item.paper_url}" target="_blank" class="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center transition">
                                 <i class="fa-solid fa-file-pdf mr-1"></i> Páipéar
                             </a>
-                            <a href="${item.msUrl}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center transition">
+                            <a href="${item.marking_scheme_url}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center transition">
                                 <i class="fa-solid fa-check-double mr-1"></i> Scéim
                             </a>
                         </div>
                     </div>
                 `;
             });
-        }
-
-        function filterQuestions() {
-            const sub = document.getElementById('filter-subject').value;
-            const top = document.getElementById('filter-topic').value;
-            const q = document.getElementById('search-q').value.toLowerCase();
-
-            const filtered = questions.filter(item => {
-                const matchSub = sub === 'all' || item.subject === sub;
-                const matchTop = top === 'all' || item.topic === top;
-                const matchQ = item.title.toLowerCase().includes(q) || item.body.toLowerCase().includes(q);
-                return matchSub && matchTop && matchQ;
-            });
-
-            renderQuestions(filtered);
         }
 
         function toggleMarking(id) {
@@ -391,54 +265,12 @@
             activeNav.classList.add('bg-brand-50', 'text-brand-700');
             activeNav.classList.remove('text-slate-600');
 
-            if (tabId === 'sec') renderSecArchive();
+            if (tabId === 'sec') fetchSecPapersFromSupabase();
+            if (tabId === 'qbank') fetchQuestionsFromSupabase();
         }
 
-        // Flashcards Logic
-        function updateCard() {
-            const card = flashcardList[currentCardIdx];
-            document.getElementById('fc-category').innerText = card.category;
-            document.getElementById('fc-content').innerText = isFlipped ? card.def : card.term;
-            document.getElementById('fc-hint').innerText = isFlipped ? '(Sainmhíniú)' : '(Cliceáil chun an sainmhíniú a fheiceáil)';
-            document.getElementById('card-counter').innerText = `${currentCardIdx + 1} / ${flashcardList.length}`;
-        }
-
-        function flipCard() {
-            isFlipped = !isFlipped;
-            updateCard();
-        }
-
-        function nextCard() {
-            isFlipped = false;
-            currentCardIdx = (currentCardIdx + 1) % flashcardList.length;
-            updateCard();
-        }
-
-        function prevCard() {
-            isFlipped = false;
-            currentCardIdx = (currentCardIdx - 1 + flashcardList.length) % flashcardList.length;
-            updateCard();
-        }
-
-        // Audio Synthesis (Web Speech API)
-        function speakText() {
-            const text = document.getElementById('speech-text').innerText;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ga-IE';
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // Language toggle dummy implementation
-        let lang = 'ga';
-        function toggleLanguage() {
-            lang = lang === 'ga' ? 'en' : 'ga';
-            document.getElementById('lang-toggle').innerText = lang === 'ga' ? 'EN' : 'GA';
-        }
-
-        // Initial Load
         document.addEventListener('DOMContentLoaded', () => {
-            renderQuestions(questions);
-            updateCard();
+            fetchQuestionsFromSupabase();
         });
     </script>
 </body>
