@@ -96,15 +96,22 @@
                 <h1 class="text-2xl sm:text-3xl font-bold">Cartlann Páipéir Scrúduithe SEC</h1>
                 <p class="text-slate-300 text-sm mt-1">Páipéir agus Scéimeanna Marcála á lódáil ó do bhunachar sonraí.</p>
             </div>
-
-            <!-- PDF Archive Filters -->
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Ábhar</label>
-                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
-                        <option value="all">Gach Ábhar</option>
-                        <option value="Bitheolaíocht">Bitheolaíocht</option>
-                        <option value="Matamaitic">Matamaitic</option>
+<div>
+    <label class="block text-xs font-semibold text-slate-500 mb-1">Bliain</label>
+    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
+        <option value="all">Gach Bliain (2015 - 2024)</option>
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+        <option value="2017">2017</option>
+        <option value="2016">2016</option>
+        <option value="2015">2015</option>
+    </select>
+</div>
                         <option value="Tíreolaíocht">Tíreolaíocht</option>
                         <option value="Gaeilge">Gaeilge</option>
                     </select>
