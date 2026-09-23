@@ -59,6 +59,10 @@
                         <i class="fa-solid fa-house"></i>
                         <span data-i18n="nav-home">Bhaile</span>
                     </button>
+                    <button id="nav-notes" onclick="switchTab('notes')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span data-i18n="nav-notes">Nótaí</span>
+                    </button>
                     <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                         <i class="fa-solid fa-book-open"></i>
                         <span data-i18n="nav-qbank">Ceisteanna</span>
@@ -102,12 +106,12 @@
                         Do thuras Ardteiste, simplí
                     </h1>
                     <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl" data-i18n="hero-desc">
-                        Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.
+                        Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: nótaí Athbhreithnithe, tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-2">
-                        <button onclick="switchTab('qbank')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <span data-i18n="hero-btn-q">Cuardaigh Ceisteanna</span>
+                        <button onclick="switchTab('notes')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <span data-i18n="hero-btn-notes">Déan Staidéar ar Nótaí</span>
                         </button>
                         <button onclick="switchTab('calc')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center space-x-2 backdrop-blur-sm">
                             <i class="fa-solid fa-calculator"></i>
@@ -118,7 +122,21 @@
             </div>
 
             <!-- Feature Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Card Notes -->
+                <div onclick="switchTab('notes')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card0-title">Nótaí Athbhreithnithe</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card0-desc">
+                        Nótaí cuimsitheacha ar gach caibidil. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.
+                    </p>
+                    <div class="pt-2 flex items-center text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition">
+                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </div>
+
                 <!-- Card 1 -->
                 <div onclick="switchTab('qbank')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
                     <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-brand-600 group-hover:text-white transition duration-300">
@@ -160,6 +178,48 @@
                         <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- TAB: NOTES SECTION -->
+        <section id="tab-notes" class="tab-content hidden space-y-6">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Athbhreithniú Ardteiste
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="notes-title">Nótaí Staidéir na hArdteiste</h1>
+                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="notes-desc">
+                        Roghnaigh ábhar le liosta de na caibidlí go léir a fheiceáil agus ábhar athbhreithnithe iomlán a fháil.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Subject Selector Header -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="w-full sm:w-1/2">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="notes-select-subject">Roghnaigh Ábhar / Select Subject</label>
+                    <select id="notes-subject-select" onchange="renderSubjectNotes()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                        <option value="biology"> Bitheolaíocht (Biology) - Unit 2 Complete</option>
+                        <option value="maths" disabled> Matamaitic (Maths) - Coming Soon</option>
+                        <option value="chemistry" disabled> Ceimic (Chemistry) - Coming Soon</option>
+                        <option value="physics" disabled> Fisic (Physics) - Coming Soon</option>
+                        <option value="geography" disabled> Tíreolaíocht (Geography) - Coming Soon</option>
+                    </select>
+                </div>
+                <div class="text-xs text-slate-500 font-medium self-end sm:self-center">
+                    <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200">
+                        <i class="fa-solid fa-circle-info mr-1"></i> <span id="chapters-count-badge">11 Caibidil Ar Fáil</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Chapters Accordion Container -->
+            <div id="notes-chapters-container" class="space-y-4">
+                <!-- Chapters dynamic accordion HTML -->
             </div>
         </section>
 
@@ -345,14 +405,17 @@
         const i18n = {
             ga: {
                 "nav-home": "Bhaile",
+                "nav-notes": "Nótaí",
                 "nav-qbank": "Ceisteanna",
                 "nav-sec": "Cartlann SEC",
                 "nav-calc": "Pointí CAO",
                 "hero-badge": "Áiseanna Staidéir na hArdteiste",
                 "hero-title": "Do thuras Ardteiste, simplí",
-                "hero-desc": "Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.",
-                "hero-btn-q": "Cuardaigh Ceisteanna",
+                "hero-desc": "Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: nótaí Athbhreithnithe, tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.",
+                "hero-btn-notes": "Déan Staidéar ar Nótaí",
                 "hero-btn-calc": "Áireamhán CAO",
+                "card0-title": "Nótaí Athbhreithnithe",
+                "card0-desc": "Nótaí cuimsitheacha ar gach caibidil. Cuirmsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.",
                 "card1-title": "Tobar Ceisteanna",
                 "card1-desc": "Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.",
                 "card2-title": "Cartlann SEC (2015-2024)",
@@ -360,6 +423,9 @@
                 "card3-title": "Áireamhán CAO",
                 "card3-desc": "Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.",
                 "card-explore": "Achoimre",
+                "notes-title": "Nótaí Staidéir na hArdteiste",
+                "notes-desc": "Roghnaigh ábhar le liosta de na caibidlí go léir a fheiceáil agus ábhar athbhreithnithe iomlán a fháil.",
+                "notes-select-subject": "Roghnaigh Ábhar",
                 "qbank-title": "Tobar Ceisteanna na hArdteiste",
                 "qbank-desc": "Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.",
                 "sec-title": "Páipéir & Scéimeanna Marcála",
@@ -387,14 +453,17 @@
             },
             en: {
                 "nav-home": "Home",
+                "nav-notes": "Notes",
                 "nav-qbank": "Questions",
                 "nav-sec": "SEC Archive",
                 "nav-calc": "CAO Points",
                 "hero-badge": "Leaving Cert Study Resources",
                 "hero-title": "Your Leaving Cert journey, simplified",
-                "hero-desc": "Everything you need for your Leaving Cert exams: question bank, official SEC archive, and CAO points calculator – in Irish and English.",
-                "hero-btn-q": "Search Questions",
+                "hero-desc": "Everything you need for your Leaving Cert exams: revision notes, question bank, official SEC archive, and CAO points calculator – in Irish and English.",
+                "hero-btn-notes": "Study Revision Notes",
                 "hero-btn-calc": "CAO Calculator",
+                "card0-title": "Revision Notes",
+                "card0-desc": "Comprehensive revision notes by chapter. Includes full Unit 2 for Leaving Cert Biology.",
                 "card1-title": "Question Bank",
                 "card1-desc": "Study exam questions by topic and subject with integrated marking schemes.",
                 "card2-title": "SEC Archive (2015-2024)",
@@ -402,6 +471,9 @@
                 "card3-title": "CAO Points Calculator",
                 "card3-desc": "Calculate your CAO points quickly including Higher Level Maths bonus points.",
                 "card-explore": "Explore",
+                "notes-title": "Leaving Cert Study Notes",
+                "notes-desc": "Select a subject to expand chapters and access complete revision content.",
+                "notes-select-subject": "Select Subject",
                 "qbank-title": "Leaving Cert Question Bank",
                 "qbank-desc": "Search exam questions by subject or key topic.",
                 "sec-title": "Exam Papers & Marking Schemes",
@@ -429,6 +501,214 @@
             }
         };
 
+        // BIOLOGY UNIT 2 REVISION DATA
+        const biologyUnit2Data = [
+            {
+                id: 'ch-cell',
+                titleGa: 'Caibidil 2.1: An Cill (The Cell)',
+                titleEn: 'Chapter 2.1: The Cell',
+                subtitle: 'Cell Structure, Organelles & Cell Types',
+                keyPointsGa: [
+                    '<strong>Prokaryotic Cells:</strong> Níl núicléas atá timpeallaithe ag scannán acu agus níl orgánaigh atá timpeallaithe ag scannán acu (m.sh., Baictéir).',
+                    '<strong>Eukaryotic Cells:</strong> Tá núicléas atá timpeallaithe ag scannán acu (m.sh. Cill phlanda, cill ainmhí, fungais).',
+                    '<strong>Membrane Structure:</strong> Déanta as Sraithe dhúbailte fosphalaipíde le próitéiní leabaithe (Fluid Mosaic Model).',
+                    '<strong>Organelles Key Functions:</strong>',
+                    '&bull; <em>Miteachoindre:</em> Suíomh an riospráide aeróbaigh (Táirgeadh ATP). Tá maoilín DNA laistigh de.',
+                    '&bull; <em>Ríobosóim:</em> Suíomh na sintéise próitéine.',
+                    '&bull; <em>Clóraplaist:</em> Suíomh an fhótasintéise i gcilla phlanda.',
+                    '&bull; <em>Scannán Cille:</em> Rialaíonn sé substaintí ag dul isteach agus amach (Rogh-theachtach).'
+                ],
+                keyPointsEn: [
+                    '<strong>Prokaryotic Cells:</strong> Do not have a membrane-bound nucleus or membrane-bound organelles (e.g., Bacteria).',
+                    '<strong>Eukaryotic Cells:</strong> Have a membrane-bound nucleus and organelles (e.g., Plant cells, Animal cells, Fungi).',
+                    '<strong>Membrane Structure:</strong> Phospholipid bilayer with embedded proteins (Fluid Mosaic Model).',
+                    '<strong>Key Organelles:</strong>',
+                    '&bull; <em>Mitochondria:</em> Site of aerobic respiration (ATP production). Contains its own DNA.',
+                    '&bull; <em>Ribosomes:</em> Site of protein synthesis.',
+                    '&bull; <em>Chloroplasts:</em> Site of photosynthesis in plant cells.',
+                    '&bull; <em>Cell Membrane:</em> Controls entry and exit of substances (Selectively permeable).'
+                ]
+            },
+            {
+                id: 'ch-microscopy',
+                titleGa: 'Caibidil 2.2: Struchtúr Cille & Micreascópacht',
+                titleEn: 'Chapter 2.2: Cell Structure & Microscopy',
+                subtitle: 'Practical Preparation & Magnification',
+                keyPointsGa: [
+                    '<strong>Staining Cells:</strong> Usáidtear <em>Iaidín (Iodine)</em> le haghaidh cealla planda (Loinniú) agus <em>Gorm Meitiléine (Methylene Blue)</em> le haghaidh cealla ainmhithe (cealla leicne).',
+                    '<strong>Light Microscope (Micreascóp Solais):</strong> Úsáideann sé solas agus lionsaí glasa. Sroicheann sé zúmáil suas le x1000.',
+                    '<strong>Electron Microscope (Micreascóp Leictreoin):</strong> Úsáideann sé pónairí leictreon le haghaidh taifeach ard (TEM & SEM). Is féidir ultrastruchtúr na cille a fheiceáil.',
+                    '<strong>Coirt Chlúdaigh (Coverslip):</strong> Cuirtear i bhfeidhm é ag uillinn 45 grád le snáthaid ghléasta chun boilgeoga aeir a chosc.'
+                ],
+                keyPointsEn: [
+                    '<strong>Cell Staining:</strong> Use <em>Iodine</em> to stain plant cells (Onion cells) and <em>Methylene Blue</em> to stain animal cheek cells.',
+                    '<strong>Light Microscope:</strong> Uses light and glass lenses. Magnifies up to x1000.',
+                    '<strong>Electron Microscope:</strong> Uses electron beams to view cell ultrastructure (TEM = Transmission, SEM = Scanning).',
+                    '<strong>Coverslip Application:</strong> Lowered at a 45° angle with a mounting needle to avoid trapping air bubbles.'
+                ]
+            },
+            {
+                id: 'ch-enzymes',
+                titleGa: 'Caibidil 2.3: Meitibileacht Cille & Einsímí',
+                titleEn: 'Chapter 2.3: Cell Metabolism & Enzymes',
+                subtitle: 'Biocatalysts, Active Site Theory & Immobilisation',
+                keyPointsGa: [
+                    '<strong>Einsím:</strong> Bithchatalaíoch próitéine a ghéaraíonn ráta imoibrithe ceimicigh gan é féin a úsáid.',
+                    '<strong>An Láthair Ghníomhach (Active Site):</strong> An chuid den einsím a nascann leis an tsubstaint (Múnla Oiriúnaithe Ghníomhaigh / Induced Fit Model).',
+                    '<strong>Dínádúrú (Denaturation):</strong> Cailliúint crutha tríthoiseach na heinsíme ionas nach féidir léi feidhmiú a thuilleadh (mar gheall ar theocht ard nó pH mí-oiriúnach).',
+                    '<strong>Einsímí Inslithe (Immobilised Enzymes):</strong> Einsímí atá ceangailte nó faoi ghlas i n-ábhar neamhghníomhach (M.sh., Ailgináit Sodiama le haghaidh Giosta). Athúsáidte go héasca ar scála tionsclaíoch.'
+                ],
+                keyPointsEn: [
+                    '<strong>Enzyme:</strong> A biological protein catalyst that speeds up chemical reactions without being used up.',
+                    '<strong>Active Site:</strong> The specific region of the enzyme that binds to the substrate (Induced Fit Model).',
+                    '<strong>Denaturation:</strong> The permanent loss of an enzyme’s 3D shape and function caused by extreme pH or high heat.',
+                    '<strong>Immobilised Enzymes:</strong> Enzymes fixed or trapped in an inert matrix (e.g. Sodium Alginate beads). Benefits: Reusable, pure product, cheap processing.'
+                ]
+            },
+            {
+                id: 'ch-photosynthesis',
+                titleGa: 'Caibidil 2.4: Fótasintéis (Photosynthesis)',
+                titleEn: 'Chapter 2.4: Photosynthesis',
+                subtitle: 'Light Stage, Dark Stage & Solar Energy',
+                keyPointsGa: [
+                    '<strong>Cothromóid Fótasintéise:</strong> 6CO₂ + 6H₂O + Solas ➔ C₆H₁₂O₆ + 6O₂',
+                    '<strong>An Chéim Sholas-Spleách (Light Stage):</strong> Tarlóíonn sé sa ghrána i gclóraplaist. Solas glactha ag clóraifil. Roinntear uisce (fótalúis) go H⁺, leictreoin, agus O₂.',
+                    '<strong>Cosán 1 & Cosán 2:</strong> Cosán Timthriallach (ATP a ghiniúint) vs Cosán Neamh-Thimthriallach (ATP & NADPH a ghiniúint).',
+                    '<strong>An Chéim Dhorcha (Dark Stage):</strong> Tarlóíonn sé sa stroma. Ní gá solas, rialaithe ag einsímí. Úsáidtear ATP & NADPH chun CO₂ a laghdú go Glúcós.'
+                ],
+                keyPointsEn: [
+                    '<strong>Photosynthesis Equation:</strong> 6CO₂ + 6H₂O + Solar Energy ➔ C₆H₁₂O₆ + 6O₂',
+                    '<strong>Light Stage:</strong> Occurs in grana of chloroplasts. Light absorbed by chlorophyll; water split (photolysis) into H⁺, electrons, and oxygen.',
+                    '<strong>Pathway 1 vs 2:</strong> Cyclic photophosphorylation (ATP only) vs Non-Cyclic photophosphorylation (ATP and NADPH produced).',
+                    '<strong>Dark Stage:</strong> Occurs in stroma. Enzyme-controlled, light-independent. Uses ATP & NADPH energy to convert CO₂ into Glucose.'
+                ]
+            },
+            {
+                id: 'ch-respiration',
+                titleGa: 'Caibidil 2.5: Riospráid Cille (Respiration)',
+                titleEn: 'Chapter 2.5: Cellular Respiration',
+                subtitle: 'Glycolysis, Krebs Cycle & Anaerobic Pathways',
+                keyPointsGa: [
+                    '<strong>Riospráid Aeróbach:</strong> An briseadh síos de ghlúcós i láthair ocsaigine chun ATP a chruthú.',
+                    '<strong>Glíocólú (Glycolysis):</strong> Céim 1. Tarlóíonn sé sa Chiotósól. Neamh-aeróbach. Bristear Glúcós (6C) go dtí 2 Phíorúváit (3C) agus +2 ATP ghlan.',
+                    '<strong>Céim 2 (Krebs Cycle):</strong> Tarlóíonn sé sa Mhaitrís Miteachoindreach. Athraítear Píorúváit go Aicéitil-CoA. Táirgtear CO₂, H⁺, leictreoin, agus ATP.',
+                    '<strong>Riospráid Neamhaeróbach (Aiseag):</strong>',
+                    '&bull; <em>I Matáin:</em> Glúcós ➔ Aigéad Lachtach (Lactic acid).',
+                    '&bull; <em>I nGiosta:</em> Glúcós ➔ Eatánól + CO₂.'
+                ],
+                keyPointsEn: [
+                    '<strong>Aerobic Respiration:</strong> The release of energy from glucose in the presence of oxygen.',
+                    '<strong>Glycolysis:</strong> Stage 1. Occurs in the cytosol. Anaerobic. Splits Glucose (6C) into 2 Pyruvate (3C) molecules, yielding a net 2 ATP.',
+                    '<strong>Stage 2 (Krebs Cycle):</strong> Occurs in mitochondrial matrix. Pyruvate converted to Acetyl-CoA. Releases CO₂, ATP, and high-energy electrons (NADH).',
+                    '<strong>Anaerobic Respiration (Fermentation):</strong>',
+                    '&bull; <em>In Animals/Lactic Acid:</em> Glucose ➔ Lactic Acid.',
+                    '&bull; <em>In Yeast:</em> Glucose ➔ Ethanol + CO₂.'
+                ]
+            },
+            {
+                id: 'ch-osmosis',
+                titleGa: 'Caibidil 2.6: Idirleathadh & Osmóis',
+                titleEn: 'Chapter 2.6: Diffusion & Osmosis',
+                subtitle: 'Movement of Molecules, Turgor & Plasmolysis',
+                keyPointsGa: [
+                    '<strong>Idirleathadh (Diffusion):</strong> Gluaiseacht mhóilíní ó réigiún le tiúchan ard go réigiún le tiúchan íseal (pasach).',
+                    '<strong>Osmóis (Osmosis):</strong> Gluaiseacht mhóilíní uisce ó thiúchan ard uisce go tiúchan íseal uisce trí scannán atá rogh-theachtach.',
+                    '<strong>Brú Turgair (Turgor Pressure):</strong> An brú amach a dhéanann an vacúil agus an ciotoplásm i gcoinne bhalla cille phlanda.',
+                    '<strong>Plasmalaíocht (Plasmolysis):</strong> Shrapadh an chiotoplásm ó bhalla na cille nuair a chuirtear cill phlanda i dtuaslagán salainn nó siúcra ardfhócasaithe.'
+                ],
+                keyPointsEn: [
+                    '<strong>Diffusion:</strong> The passive movement of molecules from a region of high concentration to low concentration.',
+                    '<strong>Osmosis:</strong> The movement of water molecules from a region of high water concentration to low water concentration across a semi-permeable membrane.',
+                    '<strong>Turgor Pressure:</strong> Outward pressure exerted by the cytoplasm and vacuole against the plant cell wall.',
+                    '<strong>Plasmolysis:</strong> Shrinking of the cytoplasm away from the cell wall when placed in a hypertonic (salty/concentrated) solution.'
+                ]
+            },
+            {
+                id: 'ch-celldivision',
+                titleGa: 'Caibidil 2.7: Deighilt Cille (Mitosis & Meiosis)',
+                titleEn: 'Chapter 2.7: Cell Division',
+                subtitle: 'Mitosis, Cancer & Meiotic Division',
+                keyPointsGa: [
+                    '<strong>Mitóis (Mitosis):</strong> Deighilt núicléach ina bhfuil dhá iníonchill a dhéantar gach ceann le líon crómasóim comhionann leis an máthairchill (2n ➔ 2n).',
+                    '<strong>Céim Mitóise (PMAT):</strong> Prophase, Metaphase, Anaphase, Telophase.',
+                    '<strong>Ailse (Cancer):</strong> Aon ghalar a bhfuil deighilt cille neamhrialaithe (mitóis gan smacht) mar chúis leis.',
+                    '<strong>Meióis (Meiosis):</strong> Deighilt núicléach a tháirgeann ceithre iníonchill atá difriúil go géiniteach le leath an líon crómasóim (2n ➔ n) chun gaiméití a chruthú.'
+                ],
+                keyPointsEn: [
+                    '<strong>Mitosis:</strong> Form of nuclear division where one cell divides to form 2 genetically identical daughter cells with the same chromosome number (2n ➔ 2n).',
+                    '<strong>Stages of Mitosis (PMAT):</strong> Prophase, Metaphase, Anaphase, Telophase.',
+                    '<strong>Cancer:</strong> Group of disorders characterized by uncontrolled mitotic division forming tumors.',
+                    '<strong>Meiosis:</strong> Nuclear division producing 4 genetically unique haploid daughter cells (2n ➔ n) for gamete formation.'
+                ]
+            },
+            {
+                id: 'ch-dna',
+                titleGa: 'Caibidil 2.8: DNA, RNA & Sintéise Próitéine',
+                titleEn: 'Chapter 2.8: DNA, RNA & Protein Synthesis',
+                subtitle: 'Nucleotides, Replication, Transcription & Translation',
+                keyPointsGa: [
+                    '<strong>Bonn-phéirí DNA:</strong> Aitéinín (A) le Thímín (T), Guainín (G) le Cítosín (C). I RNA, tagann Urasail (U) in ionad T.',
+                    '<strong>Sintéise Próitéine:</strong>',
+                    '&bull; <em>Tulaibriú (Transcription):</strong> Sintéisiú mRNA i núicléas na cille ag úsáid DNA mar theimpléad.',
+                    '&bull; <em>Aistriúchán (Translation):</strong> Códaítear seicheamh aimínoigéid ag na ríobosóim trí úsáid a bhaint as tRNA mar iompróir aimínoigéid.'
+                ],
+                keyPointsEn: [
+                    '<strong>DNA Base Pairing:</strong> Adenine (A) pairs with Thymine (T), Guanine (G) pairs with Cytosine (C). In RNA, Uracil (U) replaces T.',
+                    '<strong>Protein Synthesis Steps:</strong>',
+                    '&bull; <em>Transcription:</em> Copying the genetic code from DNA onto mRNA in the nucleus.',
+                    '&bull; <em>Translation:</em> Decoding mRNA at the ribosome using tRNA to assemble amino acids into a polypeptide chain.'
+                ]
+            },
+            {
+                id: 'ch-genetics',
+                titleGa: 'Caibidil 2.9: Dlíthe Oidhreachtúlachta & Géineolaíocht',
+                titleEn: 'Chapter 2.9: Genetic Crosses & Heredity',
+                subtitle: 'Mendel’s Laws, Monohybrid & Sex Linkage',
+                keyPointsGa: [
+                    '<strong>An Chéad Dlí Mendel (Segregation):</strong> Tá dhá fhachtóir/ailléil ag gach tréith agus scarann siad le linn foirmiú gaiméití.',
+                    '<strong>An Dara Dlí Mendel (Independent Assortment):</strong> Scarann péirí fachtóirí ó chéile go neamhspleách le linn gaiméitigh.',
+                    '<strong>Téarmaí Géiniteacha:</strong> Homozygous (Iníon-aimseartha), Heterozygous (Il-aimseartha), Phenotype (Saintréith chorportha), Genotype (Comhdhéanamh géiniteach).'
+                ],
+                keyPointsEn: [
+                    '<strong>Mendel’s 1st Law (Segregation):</strong> Alleles segregate during gamete formation so each gamete receives only one allele.',
+                    '<strong>Mendel’s 2nd Law (Independent Assortment):</strong> Either member of a pair of alleles can combine randomly with either member of another pair.',
+                    '<strong>Genetic Terms:</strong> Homozygous (identical alleles), Heterozygous (different alleles), Phenotype (physical appearance), Genotype (genetic setup).'
+                ]
+            },
+            {
+                id: 'ch-variation',
+                titleGa: 'Caibidil 2.10: Athrúchán & Éabhlóid (Evolution)',
+                titleEn: 'Chapter 2.10: Variation & Evolution',
+                subtitle: 'Mutations, Natural Selection & Speciation',
+                keyPointsGa: [
+                    '<strong>Athrúchán (Variation):</strong> Sainiúlacht idir baill den speiceas céanna (trí mheióis nó sócháin).',
+                    '<strong>Sóchán (Mutation):</strong> Athrú tobann ar eagrú nó struchtúr DNA/crómasóim.',
+                    '<strong>Roghnaíocht Nádúrtha (Natural Selection):</strong> Teoiric Darwin & Wallace – maireann orgánaigh leis na tréithe is fearr atá oiriúnaithe don timpeallacht agus síolraíonn siad.'
+                ],
+                keyPointsEn: [
+                    '<strong>Variation:</strong> Differences between members of the same species caused by sexual reproduction (meiosis) or mutations.',
+                    '<strong>Mutation:</strong> A sudden change in the amount or structure of DNA/chromosomes.',
+                    '<strong>Natural Selection:</strong> Darwin & Wallace theory – organisms with advantageous traits survive environmental pressures and pass on traits.'
+                ]
+            },
+            {
+                id: 'ch-engineering',
+                titleGa: 'Caibidil 2.11: Innealtóireacht Ghéiniteach',
+                titleEn: 'Chapter 2.11: Genetic Engineering',
+                subtitle: 'Isolation, Cutting, Insertion & Expression',
+                keyPointsGa: [
+                    '<strong>Míniú:</strong> Athrú ghnóthachtáil ghéiniteach orgánaigh trí ghéinte a ionramháil.',
+                    '<strong>Céimeanna Innealtóireachta:</strong> Isolation ➔ Cutting (Einsímí Rianaithe) ➔ Insertion (Plaismid DNA) ➔ Transformation ➔ Expression.',
+                    '<strong>Feidhmeanna:</strong> Táirgeadh Inslin i mbaictéir, barra atá frithsheasmhach in aghaidh feithidí.'
+                ],
+                keyPointsEn: [
+                    '<strong>Definition:</strong> Artificial manipulation and alteration of genes within an organism.',
+                    '<strong>Steps:</strong> Isolation ➔ Cutting (Restriction Enzymes) ➔ Insertion (Plasmid Vectors) ➔ Transformation ➔ Expression.',
+                    '<strong>Applications:</strong> Human insulin production using bacteria, pest-resistant crops.'
+                ]
+            }
+        ];
+
         function toggleLanguage() {
             currentLang = currentLang === 'ga' ? 'en' : 'ga';
             document.getElementById('lang-label').innerText = currentLang === 'ga' ? 'EN' : 'GA';
@@ -440,6 +720,9 @@
                     el.innerText = i18n[currentLang][key];
                 }
             });
+
+            // Re-render dynamic notes content with new language
+            renderSubjectNotes();
         }
 
         // TAB SWITCHING LOGIC
@@ -457,8 +740,59 @@
                 activeNav.classList.remove('text-slate-600');
             }
 
+            if (tabId === 'notes') renderSubjectNotes();
             if (tabId === 'sec') fetchSecPapersFromSupabase();
             if (tabId === 'qbank') fetchQuestionsFromSupabase();
+        }
+
+        // RENDER NOTES SECTION
+        function renderSubjectNotes() {
+            const subject = document.getElementById('notes-subject-select').value;
+            const container = document.getElementById('notes-chapters-container');
+
+            if (subject === 'biology') {
+                document.getElementById('chapters-count-badge').innerText = `${biologyUnit2Data.length} ${currentLang === 'ga' ? 'Caibidil Ar Fáil' : 'Chapters Available'}`;
+                
+                container.innerHTML = biologyUnit2Data.map((item, index) => {
+                    const title = currentLang === 'ga' ? item.titleGa : item.titleEn;
+                    const points = currentLang === 'ga' ? item.keyPointsGa : item.keyPointsEn;
+
+                    return `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition">
+                        <button onclick="toggleChapterAccordion('${item.id}')" class="w-full text-left p-5 hover:bg-slate-50 flex items-center justify-between transition focus:outline-none">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs">${index + 1}</span>
+                                <div>
+                                    <h3 class="font-extrabold text-slate-900 text-base">${title}</h3>
+                                    <p class="text-xs text-slate-500">${item.subtitle}</p>
+                                </div>
+                            </div>
+                            <i id="icon-${item.id}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+                        </button>
+
+                        <div id="content-${item.id}" class="hidden p-6 border-t border-slate-100 bg-slate-50/50 space-y-3">
+                            <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">${currentLang === 'ga' ? 'Achoimre Bheo & Pointí Athbhreithnithe' : 'Key Revision Summary'}</h4>
+                            <ul class="space-y-2 text-sm text-slate-700">
+                                ${points.map(pt => `<li class="bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">${pt}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function toggleChapterAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
         }
 
         // SUPABASE QUESTION BANK FETCHING
@@ -643,6 +977,7 @@
         // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
             initCaoCalculator();
+            renderSubjectNotes();
             fetchQuestionsFromSupabase();
         });
     </script>
