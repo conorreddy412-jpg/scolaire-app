@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ga" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoláire | Platform Staidéir don Ardteist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        teal: {
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-50 flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <!-- TOP NAVIGATION -->
+    <header class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3">
+                    <a href="#" onclick="switchTab('browser')" class="flex items-center space-x-2.5">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-emerald-500/20">
+                            S
+                        </div>
+                        <div>
+                            <span class="text-xl font-bold tracking-tight text-slate-900">Scoláire<span class="text-emerald-600">.ie</span></span>
+                            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Ardteist Gaeilge</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Global Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-6">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input id="globalSearchInput" onkeyup="handleSearch(event)" type="text" 
+                            placeholder="Cuardaigh ceisteanna, téarmaí, nó ábhair (m.sh. Fótasintéisiú)..." 
+                            class="w-full pl-10 pr-4 py-2 text-sm bg-slate-100 border border-transparent rounded-lg focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition duration-150 outline-none">
+                    </div>
+                </div>
+
+                <!-- Right Action Navigation -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    
+                    <!-- Mode Switcher -->
+                    <button onclick="switchTab('browser')" id="navBrowserBtn" class="px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition bg-emerald-50 text-emerald-700">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span class="hidden sm:inline">Ceisteanna</span>
+                    </button>
+                    
+                    <button onclick="switchTab('flashcards')" id="navFlashcardsBtn" class="px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:bg-slate-100">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="hidden sm:inline">Kártaí S flash</span>
+                    </button>
+
+                    <!-- Glossary Side Drawer Trigger -->
+                    <button onclick="toggleGlossaryModal()" class="px-3 py-2 rounded-lg text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-spell-check text-teal-600"></i>
+                        <span>Foclóir</span>
+                    </button>
+
+                    <!-- Language Toggle -->
+                    <button onclick="toggleLanguage()" id="langToggleBtn" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-100 transition">
+                        GA | EN
+                    </button>
+
+                    <!-- Saved/Bookmarks Counter -->
+                    <button onclick="toggleSavedDrawer()" class="relative p-2 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 rounded-lg transition">
+                        <i class="fa-regular fa-bookmark text-lg"></i>
+                        <span id="savedCountBadge" class="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- User Profile Avatar -->
+                    <div class="flex items-center pl-2 border-l border-slate-200">
+                        <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold text-xs cursor-pointer ring-2 ring-emerald-500/30">
+                            AO
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+
+        <!-- LEFT/MAIN CONTENT AREA -->
+        <div class="flex-1 flex flex-col space-y-6 min-w-0">
+
+            <!-- Hero Welcome Banner -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="px-3 py-1 bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 text-xs font-semibold rounded-full inline-block mb-2">
+                            <i class="fa-solid fa-graduation-cap mr-1"></i> Tairseach Ardteiste 2025/2026
+                        </span>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight" id="heroTitle">
+                            Réidh don Ardteist trí Ghaeilge?
+                        </h1>
+                        <p class="text-emerald-100 text-sm mt-1 max-w-xl" id="heroSubtitle">
+                            Rochtain ar na céadta ceist scrúduithe SEC leis na scéimeanna marcála oifigiúla i nGaeilge ghlan.
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-3 self-start md:self-auto">
+                        <button onclick="openRandomQuestion()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-xs transition shadow-md flex items-center space-x-2">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span id="randomBtnText">Ceist Chualatach</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BROWSER VIEW -->
+            <div id="browserView" class="space-y-6">
+                
+                <!-- Filter Bar -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        
+                        <!-- Subject Filter -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1" id="labelSubject">Ábhar</label>
+                            <select id="subjectSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl p-2.5 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <option value="all">Gach Ábhar (All Subjects)</option>
+                                <option value="Bitheolaíocht" selected>Bitheolaíocht (Biology)</option>
+                                <option value="Matamaitic">Matamaitic (Maths)</option>
+                                <option value="Ceimic">Ceimic (Chemistry)</option>
+                                <option value="Tíreolaíocht">Tíreolaíocht (Geography)</option>
+                                <option value="Gaeilge">Gaeilge (Irish)</option>
+                                <option value="Eacnamaíocht Bhaile">Eacnamaíocht Bhaile</option>
+                            </select>
+                        </div>
+
+                        <!-- Level Filter -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1" id="labelLevel">Leibhéal</label>
+                            <select id="levelSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl p-2.5 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <option value="all">Gach Leibhéal</option>
+                                <option value="Ardleibhéal" selected>Ardleibhéal (Higher)</option>
+                                <option value="Gnáthleibhéal">Gnáthleibhéal (Ordinary)</option>
+                            </select>
+                        </div>
+
+                        <!-- Year Filter -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1" id="labelYear">Bliain</label>
+                            <select id="yearSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl p-2.5 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <option value="all">Gach Bliain (2018-2024)</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                            </select>
+                        </div>
+
+                        <!-- Topic Filter -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1" id="labelTopic">Tópic / Caibidil</label>
+                            <select id="topicSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl p-2.5 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <option value="all">Gach Tópic</option>
+                                <option value="Fótasintéisiú">Fótasintéisiú (Photosynthesis)</option>
+                                <option value="Géineolaíocht">Géineolaíocht (Genetics)</option>
+                                <option value="Gailf / Dronuilleoga">Ailgéabar (Algebra)</option>
+                                <option value="Sraith Pictiúr">Sraith Pictiúr (Oral)</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+                        <div>
+                            Ag taispeáint <span id="questionCount" class="font-bold text-slate-900">0</span> ceisteanna curtha in oiriúint.
+                        </div>
+                        <button onclick="resetFilters()" class="text-emerald-700 hover:text-emerald-800 font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span id="resetFiltersText">Athshocraigh Scagairí</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Cards List Container -->
+                <div id="questionsContainer" class="space-y-4">
+                    <!-- Dynamic Questions Injection -->
+                </div>
+
+            </div>
+
+            <!-- FLASHCARD VIEW (Initially Hidden) -->
+            <div id="flashcardsView" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 text-center max-w-xl mx-auto">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full uppercase" id="flashcardCategoryTag">Bitheolaíocht</span>
+                        <span class="text-xs text-slate-400 font-medium" id="flashcardCounter">Cárta 1 de 5</span>
+                    </div>
+
+                    <!-- Flip Card Container -->
+                    <div id="flashcard" onclick="flipCard()" class="perspective-1000 w-full h-64 cursor-pointer group my-4">
+                        <div id="flashcardInner" class="transform-style-3d transition-transform duration-500 relative w-full h-full rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 flex flex-col items-center justify-center shadow-lg border border-slate-700">
+                            
+                            <!-- Front -->
+                            <div class="backface-hidden absolute inset-0 p-6 flex flex-col items-center justify-center space-y-3">
+                                <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Téarma SEC (Gaeilge)</span>
+                                <h2 id="cardFrontText" class="text-2xl sm:text-3xl font-extrabold text-center">Fótasintéisiú</h2>
+                                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-hand-pointer mr-1"></i> Cliceáil chun an míniú & Béarla a fheiceáil</p>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="backface-hidden rotate-y-180 absolute inset-0 p-6 flex flex-col items-center justify-center space-y-3 bg-emerald-900 rounded-2xl border border-emerald-600">
+                                <span class="text-xs text-emerald-300 font-semibold tracking-wider uppercase">Míniú & Téarma Béarla</span>
+                                <h3 id="cardBackEnglish" class="text-xl font-bold text-emerald-100">Photosynthesis</h3>
+                                <p id="cardBackDefinition" class="text-xs text-emerald-200 text-center max-w-md leading-relaxed">
+                                    An próiseas ina ndéanann plandaí glasa a mbia féin ag baint úsáide as solas na gréine, dé-ocsaíd charbóin agus uisce.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex items-center justify-between mt-6">
+                        <button onclick="prevCard()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Roimhe Seo
+                        </button>
+                        <button onclick="markCardMastered()" class="px-4 py-2 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-bold text-xs rounded-xl transition">
+                            <i class="fa-solid fa-check mr-1"></i> Foghlamtha
+                        </button>
+                        <button onclick="nextCard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition">
+                            Ar Aghaidh <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR: STUDY PLANNER & COUNTDOWN -->
+        <div class="w-full lg:w-80 flex flex-col space-y-6">
+
+            <!-- Countdown Widget -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                        <i class="fa-regular fa-clock text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900" id="titleCountdown">Comhaireamh Síos na hArdteiste</h3>
+                        <p class="text-xs text-slate-500">Meitheamh 2026</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center py-2 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="p-1.5">
+                        <span id="countDays" class="text-xl font-extrabold text-emerald-700 block">--</span>
+                        <span class="text-[10px] text-slate-500 font-medium uppercase" id="labelDays">Laethanta</span>
+                    </div>
+                    <div class="p-1.5 border-x border-slate-200">
+                        <span id="countHours" class="text-xl font-extrabold text-slate-800 block">--</span>
+                        <span class="text-[10px] text-slate-500 font-medium uppercase" id="labelHours">Uaireanta</span>
+                    </div>
+                    <div class="p-1.5">
+                        <span id="countMins" class="text-xl font-extrabold text-slate-800 block">--</span>
+                        <span class="text-[10px] text-slate-500 font-medium uppercase" id="labelMins">Nóiméid</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Progress Widget -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                <h3 class="font-bold text-sm text-slate-900 mb-1" id="titleProgress">M’Aisling Staidéir</h3>
+                <p class="text-xs text-slate-500 mb-4" id="subtitleProgress">Tópicí déanta sa tseachtain seo</p>
+
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Bitheolaíocht</span>
+                            <span class="text-emerald-700">65%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-emerald-600 h-2 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Matamaitic</span>
+                            <span class="text-teal-600">40%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-teal-600 h-2 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Tíreolaíocht</span>
+                            <span class="text-indigo-600">25%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-indigo-600 h-2 rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="alert('Gné Pleanálaithe Staidéir iomlán ag teacht go luath!')" class="w-full mt-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition">
+                    + Cuir Tópic Nua Leis
+                </button>
+            </div>
+
+            <!-- COGG / SEC Standard Info Box -->
+            <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200/60 text-emerald-900 text-xs space-y-2">
+                <div class="flex items-center space-x-2 font-bold text-emerald-800">
+                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                    <span>Téarmaíocht Aontaithe SEC</span>
+                </div>
+                <p class="leading-relaxed text-emerald-800">
+                    Úsáideann Scoláire na téarmaí oifigiúla ó <strong>COGG</strong> agus <strong>Téarma.ie</strong> chun cinntiú go bhfaigheann tú marcanna iomlána sna scrúduithe.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOCLÓIR / GLOSSARY MODAL -->
+    <div id="glossaryModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center">
+                        <i class="fa-solid fa-spell-check"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-slate-900">Foclóir Oifigiúil SEC</h3>
+                </div>
+                <button onclick="toggleGlossaryModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Search Glossary -->
+            <input id="glossarySearch" onkeyup="filterGlossary()" type="text" placeholder="Cuardaigh téarma (m.sh. Cell, Ceall...)" class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-teal-500">
+
+            <!-- Terms List -->
+            <div id="glossaryList" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SAVED QUESTIONS DRAWER -->
+    <div id="savedDrawer" class="fixed inset-y-0 right-0 w-80 bg-white z-50 shadow-2xl border-l border-slate-200 p-6 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <h3 class="font-bold text-slate-900 text-base">Ceisteanna Sábháilte</h3>
+            <button onclick="toggleSavedDrawer()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div id="savedListContainer" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar">
+            <!-- Saved items injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample Dataset of Leaving Cert Questions in Irish
+        const sampleQuestions = [
+            {
+                id: 1,
+                subject: "Bitheolaíocht",
+                level: "Ardleibhéal",
+                year: "2024",
+                section: "Roinn C - Ceist 12",
+                topic: "Fótasintéisiú",
+                marks: 30,
+                questionText: "(a) Tabhair tuairisc ghairid ar an ngrianphas sa fhótasintéisiú. (b) Mínigh ról an NADPH agus an ATP le linn an phais dhorcha.",
+                sampleAnswer: "<strong>(a) Grianphas:</strong> Tarlaíonn sé i gthracóidí an chlóraplast. Súnn an clórapfill fuinneamh solais chun móilíní uisce (H₂O) a scoilt go ocsaigin, prótóin, agus leictreoin.<br><br><strong>(b) NADPH & ATP:</strong> Soláthraíonn ATP fuinneamh agus soláthraíonn NADPH hidrigin chun dé-ocsaíd charbóin (CO₂) a laghdú go glúcós sa phas dorcha.",
+                terms: [
+                    { ga: "Grianphas", en: "Light Phase" },
+                    { ga: "Pas Dorcha", en: "Dark Phase" },
+                    { ga: "Clórapfast", en: "Chloroplast" }
+                ],
+                hasAudio: false
+            },
+            {
+                id: 2,
+                subject: "Matamaitic",
+                level: "Ardleibhéal",
+                year: "2023",
+                section: "Paipear 1 - Ceist 4",
+                topic: "Gailf / Dronuilleoga",
+                marks: 25,
+                questionText: "Réitigh an chothromóid quadratach seo a leanas agus tabhair do fhreagra i bhfoirm $a + b\\sqrt{c}$: $$2x^2 - 6x + 1 = 0$$",
+                sampleAnswer: "Úsáid an fhoirmle cheathraíoch: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$ Le $a=2, b=-6, c=1$:<br>$$x = \\frac{6 \\pm \\sqrt{36 - 8}}{4} = \\frac{6 \\pm \\sqrt{28}}{4} = \\frac{3 \\pm \\sqrt{7}}{2}$$",
+                terms: [
+                    { ga: "Cothromóid Cheathraíoch", en: "Quadratic Equation" },
+                    { ga: "Foirmle", en: "Formula" }
+                ],
+                hasAudio: false
+            },
+            {
+                id: 3,
+                subject: "Gaeilge",
+                level: "Ardleibhéal",
+                year: "2024",
+                section: "An Béaltriail",
+                topic: "Sraith Pictiúr",
+                marks: 80,
+                questionText: "Sraith Pictiúr 1: Timpiste ar an mBóthar agus an Córas Éigeandála. Déan cur síos ar Phictiúr 1 agus Pictiúr 2.",
+                sampleAnswer: "<strong>Pictiúr 1:</strong> Sa chéad phictiúr, feicimid beirt dhéagóirí ag tiomáint go tapa ar an mbóthar mór. Tá an aimsir go dona agus tá an bóthar sleamhain.<br><br><strong>Pictiúr 2:</strong> Tarlaíonn imbhualadh uafásach idir an dá charr. Glaonn finné ar na seirbhísí éigeandála gan mhoill.",
+                terms: [
+                    { ga: "Imbhualadh", en: "Collision" },
+                    { ga: "Seirbhísí Éigeandála", en: "Emergency Services" }
+                ],
+                hasAudio: true,
+                audioText: "Sa chéad phictiúr feicimid beirt dhéagóirí ag tiomáint go tapa..."
+            },
+            {
+                id: 4,
+                subject: "Bitheolaíocht",
+                level: "Ardleibhéal",
+                year: "2022",
+                section: "Roinn B - Ceist 8",
+                topic: "Géineolaíocht",
+                marks: 20,
+                questionText: "Mínigh na téarmaí seo a leanas: (i) Ailléil Chúlaitheach, (ii) Hómaizigeach, (iii) Peinoitíopa.",
+                sampleAnswer: "<strong>(i) Ailléil Chúlaitheach:</strong> Ailléil nach léirítear a héifeacht ach amháin nuair a tá sí hómaizigeach.<br><strong>(ii) Hómaizigeach:</strong> Dhá ailléil chomhionanna don tréith chéanna.<br><strong>(iii) Peinoitíopa:</strong> Tréithe fisiciúla an orgánaigh bunaithe ar a ghéinitíopa.",
+                terms: [
+                    { ga: "Ailléil Chúlaitheach", en: "Recessive Allele" },
+                    { ga: "Peinoitíopa", en: "Phenotype" }
+                ],
+                hasAudio: false
+            }
+        ];
+
+        // SEC Glossary Terms Database
+        const glossaryData = [
+            { ga: "Fótasintéisiú", en: "Photosynthesis", subject: "Bitheolaíocht" },
+            { ga: "Clórapfast", en: "Chloroplast", subject: "Bitheolaíocht" },
+            { ga: "Ailléil Chúlaitheach", en: "Recessive Allele", subject: "Bitheolaíocht" },
+            { ga: "Cothromóid Cheathraíoch", en: "Quadratic Equation", subject: "Matamaitic" },
+            { ga: "Díorthach", en: "Derivative", subject: "Matamaitic" },
+            { ga: "Sraith Pictiúr", en: "Picture Series (Oral)", subject: "Gaeilge" },
+            { ga: "Aimpliúchán", en: "Amplification", subject: "Fizic/Ceimic" },
+            { ga: "Tearmann Cinedheighilte", en: "Tectonic Plate", subject: "Tíreolaíocht" }
+        ];
+
+        // Flashcards Database
+        const flashcardsData = [
+            { ga: "Fótasintéisiú", en: "Photosynthesis", def: "An próiseas ina ndéanann plandaí glasa a mbia féin le solas na gréine.", subject: "Bitheolaíocht" },
+            { ga: "Ailléil Dhoominantach", en: "Dominant Allele", def: "Ailléil a mascíonn éifeacht ailléile cúlaithí.", subject: "Bitheolaíocht" },
+            { ga: "Díorthach (Calculus)", en: "Derivative", def: "Ráta athraithe feidhme i leith athróige eile.", subject: "Matamaitic" },
+            { ga: "Lánpháirtiú", en: "Integration", def: "An próiseas droim ar ais ó dhíorthú i matamaitic.", subject: "Matamaitic" }
+        ];
+
+        let savedQuestionIds = [];
+        let currentLanguage = 'GA'; // 'GA' or 'EN'
+        let currentFlashcardIndex = 0;
+
+        window.onload = function() {
+            renderQuestions(sampleQuestions);
+            populateGlossary();
+            startCountdown();
+            updateFlashcardUI();
+        };
+
+        // Render Questions to Page
+        function renderQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            document.getElementById('questionCount').innerText = questions.length;
+
+            if (questions.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-8 text-center border border-slate-200">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-2"></i>
+                        <h3 class="font-bold text-slate-700">Níor aimsíodh aon cheist</h3>
+                        <p class="text-xs text-slate-500 mt-1">Bain triail as na scagairí a athrú.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = questions.map(q => {
+                const isSaved = savedQuestionIds.includes(q.id);
+                return `
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 transition hover:border-slate-300 space-y-4">
+                        
+                        <!-- Header Badges -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-lg">${q.subject}</span>
+                                <span class="px-2.5 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg">${q.level}</span>
+                                <span class="text-xs font-semibold text-slate-400">${q.year} • ${q.section}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-extrabold text-teal-700 bg-teal-50 px-2 py-1 rounded-md">${q.marks} Marcanna</span>
+                                <button onclick="toggleSaveQuestion(${q.id})" class="text-slate-400 hover:text-emerald-600 transition">
+                                    <i class="${isSaved ? 'fa-solid text-emerald-600' : 'fa-regular'} fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question Text -->
+                        <div class="text-sm text-slate-800 font-medium leading-relaxed">
+                            ${q.questionText}
+                        </div>
+
+                        <!-- Vocabulary Badges -->
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            ${q.terms.map(t => `
+                                <span class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-2 py-0.5 rounded-md transition cursor-pointer" onclick="openGlossaryTerm('${t.ga}')">
+                                    <i class="fa-solid fa-tag text-[9px] text-slate-400 mr-1"></i>${t.ga} (${t.en})
+                                </span>
+                            `).join('')}
+                        </div>
+
+                        ${q.hasAudio ? `
+                            <!-- Audio Player Snippet for Oral/Aural -->
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <button onclick="playAudioSnippet('${q.audioText}')" class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-700 transition">
+                                        <i class="fa-solid fa-play text-xs pl-0.5"></i>
+                                    </button>
+                                    <span class="text-xs font-semibold text-slate-700">Éist le Cur Síos Sampail (Audio Pronunciation)</span>
+                                </div>
+                                <span class="text-[10px] text-slate-400">0:15</span>
+                            </div>
+                        ` : ''}
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center justify-between pt-2">
+                            <button onclick="toggleAnswer(${q.id})" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-eye text-emerald-400"></i>
+                                <span>Taispeáin Scéim Marcála</span>
+                            </button>
+                        </div>
+
+                        <!-- Expandable Answer Section -->
+                        <div id="answer-${q.id}" class="hidden bg-emerald-50/70 border border-emerald-200/80 rounded-xl p-4 mt-3 text-xs text-slate-800 space-y-2 leading-relaxed">
+                            <div class="font-bold text-emerald-900 uppercase tracking-wider text-[10px] flex items-center justify-between">
+                                <span>Scéim Marcála Oifigiúil / Freagra Samplach</span>
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            </div>
+                            <div>${q.sampleAnswer}</div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Answer Visibility
+        function toggleAnswer(id) {
+            const el = document.getElementById(`answer-${id}`);
+            el.classList.toggle('hidden');
+        }
+
+        // Apply Search & Filters
+        function applyFilters() {
+            const subject = document.getElementById('subjectSelect').value;
+            const level = document.getElementById('levelSelect').value;
+            const year = document.getElementById('yearSelect').value;
+            const topic = document.getElementById('topicSelect').value;
+
+            const filtered = sampleQuestions.filter(q => {
+                const matchSubject = subject === 'all' || q.subject === subject;
+                const matchLevel = level === 'all' || q.level === level;
+                const matchYear = year === 'all' || q.year === year;
+                const matchTopic = topic === 'all' || q.topic === topic;
+                return matchSubject && matchLevel && matchYear && matchTopic;
+            });
+
+            renderQuestions(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('subjectSelect').value = 'all';
+            document.getElementById('levelSelect').value = 'all';
+            document.getElementById('yearSelect').value = 'all';
+            document.getElementById('topicSelect').value = 'all';
+            renderQuestions(sampleQuestions);
+        }
+
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            const filtered = sampleQuestions.filter(q => 
+                q.questionText.toLowerCase().includes(query) ||
+                q.topic.toLowerCase().includes(query) ||
+                q.subject.toLowerCase().includes(query)
+            );
+            renderQuestions(filtered);
+        }
+
+        // Toggle Bookmark / Save Question
+        function toggleSaveQuestion(id) {
+            if (savedQuestionIds.includes(id)) {
+                savedQuestionIds = savedQuestionIds.filter(qId => qId !== id);
+            } else {
+                savedQuestionIds.push(id);
+            }
+            document.getElementById('savedCountBadge').innerText = savedQuestionIds.length;
+            applyFilters();
+            renderSavedDrawerItems();
+        }
+
+        function toggleSavedDrawer() {
+            const drawer = document.getElementById('savedDrawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function renderSavedDrawerItems() {
+            const container = document.getElementById('savedListContainer');
+            if (savedQuestionIds.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Gan aon cheisteanna sábháilte fós.</p>`;
+                return;
+            }
+            const savedItems = sampleQuestions.filter(q => savedQuestionIds.includes(q.id));
+            container.innerHTML = savedItems.map(q => `
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
+                    <span class="font-bold text-emerald-700">${q.subject} (${q.year})</span>
+                    <p class="text-slate-700 line-clamp-2">${q.questionText}</p>
+                </div>
+            `).join('');
+        }
+
+        // Switch Navigation Tabs
+        function switchTab(tab) {
+            const browserView = document.getElementById('browserView');
+            const flashcardsView = document.getElementById('flashcardsView');
+            const browserBtn = document.getElementById('navBrowserBtn');
+            const flashcardsBtn = document.getElementById('navFlashcardsBtn');
+
+            if (tab === 'browser') {
+                browserView.classList.remove('hidden');
+                flashcardsView.classList.add('hidden');
+                browserBtn.className = "px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition bg-emerald-50 text-emerald-700";
+                flashcardsBtn.className = "px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:bg-slate-100";
+            } else {
+                browserView.classList.add('hidden');
+                flashcardsView.classList.remove('hidden');
+                flashcardsBtn.className = "px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition bg-emerald-50 text-emerald-700";
+                browserBtn.className = "px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:bg-slate-100";
+            }
+        }
+
+        function flipCard() {
+            const inner = document.getElementById('flashcardInner');
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        function updateFlashcardUI() {
+            const card = flashcardsData[currentFlashcardIndex];
+            document.getElementById('flashcardCategoryTag').innerText = card.subject;
+            document.getElementById('flashcardCounter').innerText = `Cárta ${currentFlashcardIndex + 1} de ${flashcardsData.length}`;
+            document.getElementById('cardFrontText').innerText = card.ga;
+            document.getElementById('cardBackEnglish').innerText = card.en;
+            document.getElementById('cardBackDefinition').innerText = card.def;
+            
+            // Reset rotation
+            document.getElementById('flashcardInner').classList.remove('rotate-y-180');
+        }
+
+        function nextCard() {
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcardsData.length;
+            updateFlashcardUI();
+        }
+
+        function prevCard() {
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcardsData.length) % flashcardsData.length;
+            updateFlashcardUI();
+        }
+
+        function markCardMastered() {
+            alert('Marcáilte mar foghlamtha!');
+            nextCard();
+        }
+
+        // Glossary Modal Functions
+        function toggleGlossaryModal() {
+            document.getElementById('glossaryModal').classList.toggle('hidden');
+        }
+
+        function populateGlossary() {
+            const list = document.getElementById('glossaryList');
+            list.innerHTML = glossaryData.map(item => `
+                <div class="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl flex items-center justify-between text-xs">
+                    <div>
+                        <span class="font-bold text-slate-900">${item.ga}</span>
+                        <span class="text-slate-400 mx-1">•</span>
+                        <span class="text-slate-600">${item.en}</span>
+                    </div>
+                    <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-semibold">${item.subject}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterGlossary() {
+            const query = document.getElementById('glossarySearch').value.toLowerCase();
+            const filtered = glossaryData.filter(item => 
+                item.ga.toLowerCase().includes(query) || 
+                item.en.toLowerCase().includes(query)
+            );
+            const list = document.getElementById('glossaryList');
+            list.innerHTML = filtered.map(item => `
+                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
+                    <div>
+                        <span class="font-bold text-slate-900">${item.ga}</span>
+                        <span class="text-slate-400 mx-1">•</span>
+                        <span class="text-slate-600">${item.en}</span>
+                    </div>
+                    <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-semibold">${item.subject}</span>
+                </div>
+            `).join('');
+        }
+
+        function openGlossaryTerm(termGa) {
+            toggleGlossaryModal();
+            document.getElementById('glossarySearch').value = termGa;
+            filterGlossary();
+        }
+
+        // Audio Snippet Player (SpeechSynthesis Simulation)
+        function playAudioSnippet(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ga-IE';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Audio simulation: " + text);
+            }
+        }
+
+        function openRandomQuestion() {
+            const randomIndex = Math.floor(Math.random() * sampleQuestions.length);
+            renderQuestions([sampleQuestions[randomIndex]]);
+        }
+
+        function startCountdown() {
+            // Target June 3rd, 2026 Leaving Cert Start Date
+            const targetDate = new Date('June 3, 2026 09:30:00').getTime();
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance > 0) {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+                    document.getElementById('countDays').innerText = days;
+                    document.getElementById('countHours').innerText = hours;
+                    document.getElementById('countMins').innerText = minutes;
+                }
+            }, 1000);
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'GA' ? 'EN' : 'GA';
+            document.getElementById('langToggleBtn').innerText = currentLanguage === 'GA' ? 'GA | EN' : 'EN | GA';
+            
+            if (currentLanguage === 'EN') {
+                document.getElementById('heroTitle').innerText = "Ready for the Leaving Cert in Irish?";
+                document.getElementById('heroSubtitle').innerText = "Access hundreds of SEC exam questions with official marking schemes in clean Irish.";
+                document.getElementById('labelSubject').innerText = "Subject";
+                document.getElementById('labelLevel').innerText = "Level";
+                document.getElementById('labelYear').innerText = "Year";
+                document.getElementById('labelTopic').innerText = "Topic";
+                document.getElementById('titleCountdown').innerText = "Leaving Cert Countdown";
+                document.getElementById('titleProgress').innerText = "My Study Goals";
+                document.getElementById('randomBtnText').innerText = "Random Question";
+            } else {
+                document.getElementById('heroTitle').innerText = "Réidh don Ardteist trí Ghaeilge?";
+                document.getElementById('heroSubtitle').innerText = "Rochtain ar na céadta ceist scrúduithe SEC leis na scéimeanna marcála oifigiúla i nGaeilge ghlan.";
+                document.getElementById('labelSubject').innerText = "Ábhar";
+                document.getElementById('labelLevel').innerText = "Leibhéal";
+                document.getElementById('labelYear').innerText = "Bliain";
+                document.getElementById('labelTopic').innerText = "Tópic / Caibidil";
+                document.getElementById('titleCountdown').innerText = "Comhaireamh Síos na hArdteiste";
+                document.getElementById('titleProgress').innerText = "M’Aisling Staidéir";
+                document.getElementById('randomBtnText').innerText = "Ceist Chualatach";
+            }
+        }
+    </script>
+</body>
+</html>
