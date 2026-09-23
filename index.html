@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoláire - Biology Unit 2 Revision Notes</title>
+    <title>Scoláire - Leaving Cert Revision & Resources</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -12,89 +12,208 @@
         .latex-style { font-family: 'Times New Roman', Times, serif; font-style: italic; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Top Navigation -->
+    <!-- Top Navigation Header -->
     <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
                 <span class="bg-emerald-500 text-slate-950 font-black text-xl px-2.5 py-1 rounded-lg">S</span>
                 <span class="font-bold text-xl tracking-wide">Scoláire</span>
             </div>
             <nav class="flex space-x-6 text-sm font-medium">
-                <a href="#" class="text-slate-400 hover:text-white transition">Dashboard</a>
-                <a href="#" class="text-emerald-400 border-b-2 border-emerald-400 pb-1 font-semibold">Notes</a>
-                <a href="#" class="text-slate-400 hover:text-white transition">Past Papers</a>
+                <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-link text-emerald-400 border-b-2 border-emerald-400 pb-1 font-semibold transition">
+                    Dashboard
+                </button>
+                <button id="nav-notes" onclick="switchTab('notes')" class="nav-link text-slate-400 hover:text-white pb-1 transition">
+                    Notes
+                </button>
+                <button id="nav-papers" onclick="switchTab('papers')" class="nav-link text-slate-400 hover:text-white pb-1 transition">
+                    Past Papers
+                </button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        
-        <!-- Header Banner -->
-        <div class="mb-8">
-            <div class="flex items-center space-x-2 text-emerald-600 font-semibold text-sm mb-1">
-                <i class="fa-solid fa-book-open"></i>
-                <span>STUDY NOTES & REVISION</span>
-            </div>
-            <h1 class="text-3xl font-extrabold text-slate-900">Leaving Cert Subject Notes</h1>
-            <p class="text-slate-600 mt-1">Select a subject and chapter below to access comprehensive revision notes, key definitions, and bilingual Irish glossaries.</p>
-        </div>
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
 
-        <!-- Selection Controls (Subject & Chapter Dropdowns) -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- Subject Selector -->
-                <div>
-                    <label for="subject-select" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                        1. Select Subject
-                    </label>
-                    <div class="relative">
-                        <select id="subject-select" onchange="handleSubjectChange()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 font-semibold text-base rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
-                            <option value="biology" selected>Biology / Bitheolaíocht</option>
-                            <option value="chemistry" disabled>Chemistry (Coming Soon)</option>
-                            <option value="physics" disabled>Physics (Coming Soon)</option>
-                            <option value="geography" disabled>Geography (Coming Soon)</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        <!-- ================= SECTION 1: DASHBOARD / OVERVIEW ================= -->
+        <div id="tab-dashboard" class="tab-content space-y-8">
+            
+            <!-- Hero / Welcome Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white p-8 rounded-3xl shadow-lg border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        Scoláire EdTech Platform
+                    </span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Fáilte go Scoláire</h1>
+                    <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                        High-yield Leaving Cert study resources, comprehensive notes, and authentic Irish-language (<span class="text-emerald-400 font-semibold">Gaeilge</span>) study materials designed to give you an edge in your exams.
+                    </p>
+                </div>
+                <button onclick="switchTab('notes')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-3.5 rounded-xl shadow-md transition flex items-center space-x-2 shrink-0">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Explore Notes</span>
+                </button>
+            </div>
+
+            <!-- Irish Language Feature Highlight -->
+            <div class="bg-emerald-50/60 border border-emerald-200/80 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                            Gaeilge Amháin
+                        </span>
+                        <h4 class="font-bold text-slate-900 text-base">Áiseanna do Gaelcholáistí & Gaeltacht</h4>
                     </div>
+                    <p class="text-xs text-slate-600">Access H1 sample answers and key terminology glossaries specifically translated for Irish-medium students.</p>
+                </div>
+                <button onclick="switchTab('notes')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center space-x-1 shrink-0">
+                    <i class="fa-solid fa-language mr-1"></i>
+                    <span>Aistrigh go Gaeilge</span>
+                </button>
+            </div>
+
+            <!-- Quick Access Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="switchTab('notes')" class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition cursor-pointer space-y-3 group">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-microscope"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg">Biology / Bitheolaíocht</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Full coverage of Unit 2: The Cell, including diagrams, practicals, and Irish glossaries.</p>
                 </div>
 
-                <!-- Chapter Selector -->
-                <div>
-                    <label for="chapter-select" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                        2. Select Chapter / Unit 2 Topic
-                    </label>
-                    <div class="relative">
-                        <select id="chapter-select" onchange="renderChapterNotes()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 font-semibold text-base rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
-                            <option value="ch7">Chapter 7: Cell Structure & Organelles</option>
-                            <option value="ch8">Chapter 8: Cell Metabolism & Enzymes</option>
-                            <option value="ch9">Chapter 9: Photosynthesis</option>
-                            <option value="ch10">Chapter 10: Cell Respiration</option>
-                            <option value="ch11">Chapter 11: Cell Continuity & Chromosomes</option>
-                            <option value="ch12">Chapter 12: Cell Division (Mitosis & Meiosis)</option>
-                            <option value="ch13">Chapter 13: Nucleic Acids (DNA & RNA)</option>
-                            <option value="ch14">Chapter 14: Protein Synthesis</option>
-                            <option value="ch15">Chapter 15: Genetic Engineering & Biotechnology</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm opacity-60 space-y-3">
+                    <div class="w-12 h-12 bg-slate-100 text-slate-500 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-flask"></i>
                     </div>
+                    <h3 class="font-bold text-slate-900 text-lg">Chemistry (Coming Soon)</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Organic chemistry pathways, stoichometry, and practical write-ups.</p>
                 </div>
 
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm opacity-60 space-y-3">
+                    <div class="w-12 h-12 bg-slate-100 text-slate-500 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg">Geography (Coming Soon)</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Physical geography SRP guides and H1 sample responses in Irish and English.</p>
+                </div>
             </div>
+
         </div>
 
-        <!-- Notes Display Container -->
-        <div id="notes-content-area" class="space-y-8">
-            <!-- Dynamic Content Will Be Rendered Here via JavaScript -->
+
+        <!-- ================= SECTION 2: SUBJECT NOTES ================= -->
+        <div id="tab-notes" class="tab-content hidden space-y-8">
+            
+            <!-- Notes Section Header -->
+            <div>
+                <div class="flex items-center space-x-2 text-emerald-600 font-semibold text-sm mb-1">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>STUDY NOTES & REVISION</span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-slate-900">Leaving Cert Subject Notes</h1>
+                <p class="text-slate-600 mt-1">Select a subject and chapter below to access comprehensive revision notes, key definitions, and bilingual Irish glossaries.</p>
+            </div>
+
+            <!-- Subject & Chapter Selection Controls -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Subject Selector -->
+                    <div>
+                        <label for="subject-select" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                            1. Select Subject
+                        </label>
+                        <div class="relative">
+                            <select id="subject-select" onchange="handleSubjectChange()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 font-semibold text-base rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+                                <option value="biology" selected>Biology / Bitheolaíocht</option>
+                                <option value="chemistry" disabled>Chemistry (Coming Soon)</option>
+                                <option value="physics" disabled>Physics (Coming Soon)</option>
+                                <option value="geography" disabled>Geography (Coming Soon)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Chapter Selector -->
+                    <div>
+                        <label for="chapter-select" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                            2. Select Chapter / Unit 2 Topic
+                        </label>
+                        <div class="relative">
+                            <select id="chapter-select" onchange="renderChapterNotes()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 font-semibold text-base rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+                                <option value="ch7">Chapter 7: Cell Structure & Organelles</option>
+                                <option value="ch8">Chapter 8: Cell Metabolism & Enzymes</option>
+                                <option value="ch9">Chapter 9: Photosynthesis</option>
+                                <option value="ch10">Chapter 10: Cell Respiration</option>
+                                <option value="ch11">Chapter 11: Cell Continuity & Chromosomes</option>
+                                <option value="ch12">Chapter 12: Cell Division (Mitosis & Meiosis)</option>
+                                <option value="ch13">Chapter 13: Nucleic Acids (DNA & RNA)</option>
+                                <option value="ch14">Chapter 14: Protein Synthesis</option>
+                                <option value="ch15">Chapter 15: Genetic Engineering & Biotechnology</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Notes Content Area -->
+            <div id="notes-content-area" class="space-y-8">
+                <!-- Content will be rendered dynamically by JavaScript -->
+            </div>
+
+        </div>
+
+
+        <!-- ================= SECTION 3: PAST PAPERS (PLACEHOLDER) ================= -->
+        <div id="tab-papers" class="tab-content hidden space-y-6">
+            <div>
+                <h1 class="text-3xl font-extrabold text-slate-900">Past Exam Papers & Marking Schemes</h1>
+                <p class="text-slate-600 mt-1">Official SEC Examination Papers in both English (EV) and Irish (IV/GV) variants.</p>
+            </div>
+            <div class="bg-white p-12 text-center rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                <i class="fa-solid fa-file-pdf text-4xl text-slate-400"></i>
+                <h3 class="font-bold text-slate-800 text-lg">Exam Archive Integration Ready</h3>
+                <p class="text-slate-500 text-sm max-w-md mx-auto">This section will pull past exam papers directly from your Supabase database.</p>
+            </div>
         </div>
 
     </main>
 
-    <!-- Notes Data & Rendering Engine -->
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-center text-xs">
+        <p>&copy; 2026 Scoláire EdTech. Built for Irish Leaving Cert Students.</p>
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
     <script>
+        // --- Navigation Tab Switcher ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-emerald-400', 'border-b-2', 'border-emerald-400', 'font-semibold');
+                link.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-400');
+                activeNav.classList.add('text-emerald-400', 'border-b-2', 'border-emerald-400', 'font-semibold');
+            }
+
+            if (tabId === 'notes') {
+                renderChapterNotes();
+            }
+        }
+
+        // --- Biology Unit 2 Complete Data Store ---
         const biologyUnit2Data = {
             ch7: {
                 title: "Chapter 7: Cell Structure & Organelles",
@@ -391,16 +510,11 @@
             }
         };
 
-        // Render Page Initially
-        document.addEventListener('DOMContentLoaded', () => {
-            renderChapterNotes();
-        });
-
         function handleSubjectChange() {
-            // Placeholder if user selects other future subjects
             renderChapterNotes();
         }
 
+        // --- Render Chapter Notes Logic ---
         function renderChapterNotes() {
             const selectedChapterKey = document.getElementById('chapter-select').value;
             const data = biologyUnit2Data[selectedChapterKey];
@@ -411,7 +525,6 @@
                 return;
             }
 
-            // Build dynamic html content
             let keyTermsHTML = data.keyTerms.map(term => `
                 <div class="bg-white border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
                     <div class="flex items-center justify-between mb-1">
