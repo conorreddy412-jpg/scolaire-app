@@ -32,88 +32,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style> 
         body { font-family: 'Plus Jakarta Sans', sans-serif; } 
+        /* Hide scrollbars for clean horizontal scrolling nav on mobile */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50/50 text-slate-800 min-h-screen flex flex-col antialiased">
 
     <!-- Navigation Header -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
-                    <div class="bg-gradient-to-tr from-brand-700 to-brand-500 text-white p-2.5 rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">
+                <div class="flex items-center space-x-2.5 cursor-pointer flex-shrink-0" onclick="switchTab('home')">
+                    <div class="bg-gradient-to-tr from-brand-700 to-brand-500 text-white w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <div>
-                        <span class="font-extrabold text-xl text-slate-900 tracking-tight">Scoláire</span>
-                        <span class="hidden sm:inline-block ml-2 bg-brand-100/80 text-brand-800 text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-brand-200 uppercase tracking-wider">
+                        <span class="font-extrabold text-lg sm:text-xl text-slate-900 tracking-tight">Scoláire</span>
+                        <span class="hidden sm:inline-block ml-1.5 bg-brand-100/80 text-brand-800 text-[10px] px-2 py-0.5 rounded-full font-bold border border-brand-200 uppercase tracking-wider">
                             Ardteist
                         </span>
                     </div>
                 </div>
 
-                <!-- Navigation Tabs -->
-                <nav class="flex items-center space-x-1 sm:space-x-2">
-                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 bg-brand-50 text-brand-700 shadow-sm">
+                <!-- Navigation Tabs (Horizontally scrollable on mobile) -->
+                <nav class="flex items-center space-x-1 overflow-x-auto no-scrollbar py-2 px-1 max-w-[60vw] sm:max-w-none">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 bg-brand-50 text-brand-700 shadow-sm flex-shrink-0">
                         <i class="fa-solid fa-house"></i>
                         <span data-i18n="nav-home">Bhaile</span>
                     </button>
-                    <button id="nav-notes" onclick="switchTab('notes')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                    <button id="nav-notes" onclick="switchTab('notes')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
                         <i class="fa-solid fa-book-bookmark"></i>
                         <span data-i18n="nav-notes">Nótaí</span>
                     </button>
-                    <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                    <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
                         <i class="fa-solid fa-book-open"></i>
                         <span data-i18n="nav-qbank">Ceisteanna</span>
                     </button>
-                    <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                    <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
                         <span data-i18n="nav-sec">Cartlann SEC</span>
                     </button>
-                    <button id="nav-calc" onclick="switchTab('calc')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                    <button id="nav-calc" onclick="switchTab('calc')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
                         <i class="fa-solid fa-calculator"></i>
                         <span data-i18n="nav-calc">Pointí CAO</span>
                     </button>
-
-                    <!-- Language Switcher Toggle -->
-                    <div class="pl-2 border-l border-slate-200 ml-2">
-                        <button onclick="toggleLanguage()" class="flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl transition border border-slate-200">
-                            <i class="fa-solid fa-globe text-brand-600"></i>
-                            <span id="lang-label">EN</span>
-                        </button>
-                    </div>
                 </nav>
+
+                <!-- Language Switcher Toggle -->
+                <div class="pl-2 border-l border-slate-200 ml-1 flex-shrink-0">
+                    <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-2.5 py-2 rounded-xl transition border border-slate-200">
+                        <i class="fa-solid fa-globe text-brand-600"></i>
+                        <span id="lang-label">EN</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
         <!-- TAB 0: HOME PAGE -->
-        <section id="tab-home" class="tab-content space-y-10">
+        <section id="tab-home" class="tab-content space-y-8 sm:space-y-10">
             <!-- Hero Banner -->
-            <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 text-white p-8 sm:p-12 rounded-3xl shadow-2xl border border-slate-800">
+            <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 text-white p-6 sm:p-12 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-16 -bottom-16 opacity-10 text-[220px] text-brand-400 pointer-events-none">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
-                <div class="relative z-10 max-w-3xl space-y-6">
+                <div class="relative z-10 max-w-3xl space-y-4 sm:space-y-6">
                     <span class="bg-brand-500/20 text-brand-300 text-xs px-3.5 py-1.5 rounded-full border border-brand-500/30 font-semibold inline-flex items-center backdrop-blur-sm">
                         <i class="fa-solid fa-sparkles mr-2 text-amber-400"></i>
                         <span data-i18n="hero-badge">Áiseanna Staidéir na hArdteiste</span>
                     </span>
-                    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight" data-i18n="hero-title">
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight" data-i18n="hero-title">
                         Do thuras Ardteiste, simplí
                     </h1>
-                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl" data-i18n="hero-desc">
+                    <p class="text-slate-300 text-sm sm:text-lg leading-relaxed max-w-2xl" data-i18n="hero-desc">
                         Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: nótaí Athbhreithnithe, tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.
                     </p>
-                    <div class="flex flex-wrap gap-4 pt-2">
-                        <button onclick="switchTab('notes')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button onclick="switchTab('notes')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center justify-center space-x-2 text-sm sm:text-base">
                             <i class="fa-solid fa-book-bookmark"></i>
                             <span data-i18n="hero-btn-notes">Déan Staidéar ar Nótaí</span>
                         </button>
-                        <button onclick="switchTab('calc')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center space-x-2 backdrop-blur-sm">
+                        <button onclick="switchTab('calc')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center justify-center space-x-2 backdrop-blur-sm text-sm sm:text-base">
                             <i class="fa-solid fa-calculator"></i>
                             <span data-i18n="hero-btn-calc">Áireamhán CAO</span>
                         </button>
@@ -122,14 +125,14 @@
             </div>
 
             <!-- Feature Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <!-- Card Notes -->
-                <div onclick="switchTab('notes')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                <div onclick="switchTab('notes')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
                     <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
                         <i class="fa-solid fa-book-bookmark"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card0-title">Nótaí Athbhreithnithe</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card0-desc">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card0-title">Nótaí Athbhreithnithe</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card0-desc">
                         Nótaí cuimsitheacha ar gach caibidil. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.
                     </p>
                     <div class="pt-2 flex items-center text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition">
@@ -138,12 +141,12 @@
                 </div>
 
                 <!-- Card 1 -->
-                <div onclick="switchTab('qbank')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                <div onclick="switchTab('qbank')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
                     <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-brand-600 group-hover:text-white transition duration-300">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card1-title">Tobar Ceisteanna</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card1-desc">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card1-title">Tobar Ceisteanna</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card1-desc">
                         Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.
                     </p>
                     <div class="pt-2 flex items-center text-xs font-bold text-brand-600 group-hover:translate-x-1 transition">
@@ -152,12 +155,12 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div onclick="switchTab('sec')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                <div onclick="switchTab('sec')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
                     <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
                         <i class="fa-solid fa-file-pdf"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card2-title">Cartlann SEC (2015-2024)</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card2-desc">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card2-title">Cartlann SEC (2015-2024)</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card2-desc">
                         Rochtain ghasta ar gach páipéar oifigiúil agus scéim marcála do na príomh-ábhair thar na 10 mbliana seo caite.
                     </p>
                     <div class="pt-2 flex items-center text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition">
@@ -166,12 +169,12 @@
                 </div>
 
                 <!-- Card 3 -->
-                <div onclick="switchTab('calc')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                <div onclick="switchTab('calc')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
                     <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-amber-500 group-hover:text-white transition duration-300">
                         <i class="fa-solid fa-calculator"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card3-title">Áireamhán CAO</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card3-desc">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card3-title">Áireamhán CAO</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card3-desc">
                         Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.
                     </p>
                     <div class="pt-2 flex items-center text-xs font-bold text-amber-600 group-hover:translate-x-1 transition">
@@ -183,7 +186,7 @@
 
         <!-- TAB: NOTES SECTION -->
         <section id="tab-notes" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
                     <i class="fa-solid fa-book-bookmark"></i>
                 </div>
@@ -191,18 +194,18 @@
                     <span class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
                         <i class="fa-solid fa-graduation-cap mr-1"></i> Athbhreithniú Ardteiste
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="notes-title">Nótaí Staidéir na hArdteiste</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="notes-desc">
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="notes-title">Nótaí Staidéir na hArdteiste</h1>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="notes-desc">
                         Roghnaigh ábhar le liosta de na caibidlí go léir a fheiceáil agus ábhar athbhreithnithe iomlán a fháil.
                     </p>
                 </div>
             </div>
 
             <!-- Subject Selector Header -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="w-full sm:w-1/2">
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="notes-select-subject">Roghnaigh Ábhar / Select Subject</label>
-                    <select id="notes-subject-select" onchange="renderSubjectNotes()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                    <select id="notes-subject-select" onchange="renderSubjectNotes()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <option value="biology"> Bitheolaíocht (Biology) - Unit 2 Complete</option>
                         <option value="maths" disabled> Matamaitic (Maths) - Coming Soon</option>
                         <option value="chemistry" disabled> Ceimic (Chemistry) - Coming Soon</option>
@@ -210,8 +213,8 @@
                         <option value="geography" disabled> Tíreolaíocht (Geography) - Coming Soon</option>
                     </select>
                 </div>
-                <div class="text-xs text-slate-500 font-medium self-end sm:self-center">
-                    <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200">
+                <div class="text-xs text-slate-500 font-medium self-stretch sm:self-center text-left sm:text-right">
+                    <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200 inline-block">
                         <i class="fa-solid fa-circle-info mr-1"></i> <span id="chapters-count-badge">11 Caibidil Ar Fáil</span>
                     </span>
                 </div>
@@ -225,7 +228,7 @@
 
         <!-- TAB 1: QUESTION BANK -->
         <section id="tab-qbank" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
                     <i class="fa-solid fa-database"></i>
                 </div>
@@ -233,18 +236,18 @@
                     <span class="bg-brand-500/20 text-brand-300 text-xs px-3 py-1 rounded-full border border-brand-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
                         <i class="fa-solid fa-bolt mr-1"></i> Live Supabase DB
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="qbank-title">Tobar Ceisteanna na hArdteiste</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="qbank-desc">
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="qbank-title">Tobar Ceisteanna na hArdteiste</h1>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="qbank-desc">
                         Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.
                     </p>
                 </div>
             </div>
 
             <!-- Question Filters -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
-                    <select id="q-subject" onchange="fetchQuestionsFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                    <select id="q-subject" onchange="fetchQuestionsFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
                         <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
                         <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
@@ -257,7 +260,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-search">Cuardaigh Ceist</label>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="q-search" oninput="fetchQuestionsFromSupabase()" placeholder="M.sh. Fótasintéisiú, Ailgéabar, Cill..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 pl-10 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                        <input type="text" id="q-search" oninput="fetchQuestionsFromSupabase()" placeholder="M.sh. Fótasintéisiú, Ailgéabar, Cill..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 pl-10 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                     </div>
                 </div>
             </div>
@@ -272,7 +275,7 @@
 
         <!-- TAB 2: SEC ARCHIVE -->
         <section id="tab-sec" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
                     <i class="fa-solid fa-archive"></i>
                 </div>
@@ -280,18 +283,18 @@
                     <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
                         <i class="fa-solid fa-folder-open mr-1"></i> Cartlann Oifigiúil 2015–2024
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="sec-title">Páipéir & Scéimeanna Marcála</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="sec-desc">
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="sec-title">Páipéir & Scéimeanna Marcála</h1>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="sec-desc">
                         Rochtain ghasta ar gach páipéar scrúduithe agus scéim marcála do na príomh-ábhair eolaíochta agus matamaitice.
                     </p>
                 </div>
             </div>
 
             <!-- PDF Archive Filters -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
-                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
                         <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
                         <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
@@ -302,7 +305,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-year">Bliain</label>
-                    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <option value="all" data-i18n="opt-all-years">Gach Bliain (2015 - 2024)</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
@@ -318,7 +321,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-level">Leibhéal</label>
-                    <select id="sec-level" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                    <select id="sec-level" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <option value="all" data-i18n="opt-all-levels">Gach Leibhéal</option>
                         <option value="Ardleibhéal">Ardleibhéal (HL)</option>
                         <option value="Gnáthleibhéal">Gnáthleibhéal (OL)</option>
@@ -336,7 +339,7 @@
 
         <!-- TAB 3: CAO POINTS CALCULATOR -->
         <section id="tab-calc" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
                     <i class="fa-solid fa-calculator"></i>
                 </div>
@@ -344,8 +347,8 @@
                     <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
                         <i class="fa-solid fa-calculator mr-1"></i> Áireamhán Scór
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="calc-title">Áireamhán Pointí CAO</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="calc-desc">
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="calc-title">Áireamhán Pointí CAO</h1>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="calc-desc">
                         Roghnaigh na 6 thorthaí is fearr uait chun do phointí CAO iomlána a ríomh go huathoibríoch.
                     </p>
                 </div>
@@ -353,8 +356,8 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Inputs Section -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-                    <h3 class="text-lg font-bold text-slate-900" data-i18n="calc-subjects-heading">Torthaí do na hÁbhair</h3>
+                <div class="lg:col-span-2 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900" data-i18n="calc-subjects-heading">Torthaí do na hÁbhair</h3>
                     
                     <div id="subject-rows" class="space-y-3">
                         <!-- Rows injected by JavaScript -->
@@ -362,10 +365,10 @@
                 </div>
 
                 <!-- Live Results Summary Widget -->
-                <div class="bg-gradient-to-b from-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-xl border border-brand-800 flex flex-col justify-between h-fit sticky top-24">
+                <div class="bg-gradient-to-b from-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-xl border border-brand-800 flex flex-col justify-between h-fit lg:sticky lg:top-24">
                     <div>
                         <span class="text-xs font-bold uppercase tracking-wider text-brand-300" data-i18n="calc-score-label">Iomlán Pointí CAO</span>
-                        <div class="text-6xl font-extrabold text-white my-3" id="total-points">0</div>
+                        <div class="text-5xl sm:text-6xl font-extrabold text-white my-3" id="total-points">0</div>
                         <p class="text-xs text-brand-200/80 leading-relaxed" data-i18n="calc-info">
                             * Glactar leis na 6 thorthaí is airde. Cuirtear +25 bonnphointe le H1–H6 sa Mhatamaitic Ardleibhéil.
                         </p>
@@ -388,7 +391,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-auto">
+    <footer class="bg-slate-900 text-slate-400 py-6 sm:py-8 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
             <p class="font-medium">&copy; 2026 Scoláire. Áiseanna Staidéir don Ardteistiméireacht.</p>
         </div>
@@ -649,8 +652,8 @@
                 keyPointsGa: [
                     '<strong>Bonn-phéirí DNA:</strong> Aitéinín (A) le Thímín (T), Guainín (G) le Cítosín (C). I RNA, tagann Urasail (U) in ionad T.',
                     '<strong>Sintéise Próitéine:</strong>',
-                    '&bull; <em>Tulaibriú (Transcription):</strong> Sintéisiú mRNA i núicléas na cille ag úsáid DNA mar theimpléad.',
-                    '&bull; <em>Aistriúchán (Translation):</strong> Códaítear seicheamh aimínoigéid ag na ríobosóim trí úsáid a bhaint as tRNA mar iompróir aimínoigéid.'
+                    '&bull; <em>Tulaibriú (Transcription):</em> Sintéisiú mRNA i núicléas na cille ag úsáid DNA mar theimpléad.',
+                    '&bull; <em>Aistriúchán (Translation):</em> Códaítear seicheamh aimínoigéid ag na ríobosóim trí úsáid a bhaint as tRNA mar iompróir aimínoigéid.'
                 ],
                 keyPointsEn: [
                     '<strong>DNA Base Pairing:</strong> Adenine (A) pairs with Thymine (T), Guanine (G) pairs with Cytosine (C). In RNA, Uracil (U) replaces T.',
@@ -759,20 +762,20 @@
 
                     return `
                     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition">
-                        <button onclick="toggleChapterAccordion('${item.id}')" class="w-full text-left p-5 hover:bg-slate-50 flex items-center justify-between transition focus:outline-none">
-                            <div class="flex items-center space-x-3">
-                                <span class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs">${index + 1}</span>
+                        <button onclick="toggleChapterAccordion('${item.id}')" class="w-full text-left p-4 sm:p-5 hover:bg-slate-50 flex items-center justify-between transition focus:outline-none">
+                            <div class="flex items-center space-x-3 pr-2">
+                                <span class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs flex-shrink-0">${index + 1}</span>
                                 <div>
-                                    <h3 class="font-extrabold text-slate-900 text-base">${title}</h3>
-                                    <p class="text-xs text-slate-500">${item.subtitle}</p>
+                                    <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">${title}</h3>
+                                    <p class="text-[11px] sm:text-xs text-slate-500">${item.subtitle}</p>
                                 </div>
                             </div>
-                            <i id="icon-${item.id}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200"></i>
+                            <i id="icon-${item.id}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-200 flex-shrink-0"></i>
                         </button>
 
-                        <div id="content-${item.id}" class="hidden p-6 border-t border-slate-100 bg-slate-50/50 space-y-3">
+                        <div id="content-${item.id}" class="hidden p-4 sm:p-6 border-t border-slate-100 bg-slate-50/50 space-y-3">
                             <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">${currentLang === 'ga' ? 'Achoimre Bheo & Pointí Athbhreithnithe' : 'Key Revision Summary'}</h4>
-                            <ul class="space-y-2 text-sm text-slate-700">
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
                                 ${points.map(pt => `<li class="bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">${pt}</li>`).join('')}
                             </ul>
                         </div>
@@ -837,7 +840,7 @@
             }
 
             container.innerHTML = filtered.map(q => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center space-x-2">
                             <span class="bg-brand-100 text-brand-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-brand-200">${q.subject || ''}</span>
@@ -845,9 +848,9 @@
                             ${q.level ? `<span class="bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-lg">${q.level}</span>` : ''}
                         </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">${q.title || 'Ceist'}</h3>
-                    ${q.question_text ? `<p class="text-sm text-slate-600 leading-relaxed">${q.question_text}</p>` : ''}
-                    <div class="flex gap-3 pt-2">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900">${q.title || 'Ceist'}</h3>
+                    ${q.question_text ? `<p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${q.question_text}</p>` : ''}
+                    <div class="flex flex-wrap gap-2 pt-2">
                         ${q.paper_url ? `<a href="${q.paper_url}" target="_blank" class="inline-flex items-center text-xs font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-xl transition"><i class="fa-solid fa-file-pdf mr-1.5"></i> Páipéar PDF</a>` : ''}
                         ${q.marking_scheme_url ? `<a href="${q.marking_scheme_url}" target="_blank" class="inline-flex items-center text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-2 rounded-xl transition"><i class="fa-solid fa-check-double mr-1.5"></i> Scéim Marcála</a>` : ''}
                     </div>
@@ -891,7 +894,7 @@
                             <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-lg border border-brand-200">${item.subject}</span>
                             <span class="text-xs font-bold text-slate-500">${item.year}</span>
                         </div>
-                        <h4 class="font-bold text-slate-900">${item.title || `${item.subject} (${item.level})`}</h4>
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">${item.title || `${item.subject} (${item.level})`}</h4>
                     </div>
                     <div class="flex gap-2 pt-2 border-t border-slate-100">
                         ${item.paper_url ? `<a href="${item.paper_url}" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl transition"><i class="fa-solid fa-file-pdf mr-1 text-red-500"></i> Páipéar</a>` : ''}
@@ -921,8 +924,8 @@
         function initCaoCalculator() {
             const container = document.getElementById('subject-rows');
             container.innerHTML = DEFAULT_SUBJECTS.map((sub, idx) => `
-                <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                    <span class="text-sm font-semibold text-slate-700 sm:w-1/3 w-full">${sub}</span>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                    <span class="text-xs sm:text-sm font-semibold text-slate-700 sm:w-1/3 w-full">${sub}</span>
                     <div class="flex items-center gap-2 sm:w-2/3 w-full">
                         <select id="level-${idx}" onchange="calculateCaoPoints()" class="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium outline-none">
                             <option value="HL">Ardleibhéal (HL)</option>
