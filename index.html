@@ -40,7 +40,8 @@
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
                     <div class="bg-gradient-to-tr from-brand-700 to-brand-500 text-white p-2.5 rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
@@ -52,15 +53,32 @@
                     </div>
                 </div>
 
-                <nav class="flex space-x-2">
-                    <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 bg-brand-50 text-brand-700 shadow-sm">
+                <!-- Navigation Tabs -->
+                <nav class="flex items-center space-x-1 sm:space-x-2">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 bg-brand-50 text-brand-700 shadow-sm">
+                        <i class="fa-solid fa-house"></i>
+                        <span data-i18n="nav-home">Bhaile</span>
+                    </button>
+                    <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                         <i class="fa-solid fa-book-open"></i>
-                        <span>Ceisteanna</span>
+                        <span data-i18n="nav-qbank">Ceisteanna</span>
                     </button>
-                    <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                    <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                         <i class="fa-solid fa-file-pdf"></i>
-                        <span>Cartlann SEC</span>
+                        <span data-i18n="nav-sec">Cartlann SEC</span>
                     </button>
+                    <button id="nav-calc" onclick="switchTab('calc')" class="nav-btn px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span data-i18n="nav-calc">Pointeaí CAO</span>
+                    </button>
+
+                    <!-- Language Switcher Toggle -->
+                    <div class="pl-2 border-l border-slate-200 ml-2">
+                        <button onclick="toggleLanguage()" class="flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl transition border border-slate-200">
+                            <i class="fa-solid fa-globe text-brand-600"></i>
+                            <span id="lang-label">EN</span>
+                        </button>
+                    </div>
                 </nav>
             </div>
         </div>
@@ -68,18 +86,95 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        <!-- TAB 0: HOME PAGE (NEW) -->
+        <section id="tab-home" class="tab-content space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 text-white p-8 sm:p-12 rounded-3xl shadow-2xl border border-slate-800">
+                <div class="absolute -right-16 -bottom-16 opacity-10 text-[220px] text-brand-400 pointer-events-none">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-6">
+                    <span class="bg-brand-500/20 text-brand-300 text-xs px-3.5 py-1.5 rounded-full border border-brand-500/30 font-semibold inline-flex items-center backdrop-blur-sm">
+                        <i class="fa-solid fa-sparkles mr-2 text-amber-400"></i>
+                        <span data-i18n="hero-badge">Áiseanna Staidéir na hArdteiste</span>
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight" data-i18n="hero-title">
+                        Do thuras Ardteiste, simplí
+                    </h1>
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl" data-i18n="hero-desc">
+                        Gach rud a bhfeil uait le haghaidh scrúduithe na hArdteiste: tobair ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('qbank')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span data-i18n="hero-btn-q">Cuardaigh Ceisteanna</span>
+                        </button>
+                        <button onclick="switchTab('calc')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center space-x-2 backdrop-blur-sm">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span data-i18n="hero-btn-calc">Áireamhán CAO</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div onclick="switchTab('qbank')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                    <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-brand-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card1-title">Tobar Ceisteanna</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card1-desc">
+                        Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.
+                    </p>
+                    <div class="pt-2 flex items-center text-xs font-bold text-brand-600 group-hover:translate-x-1 transition">
+                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="switchTab('sec')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card2-title">Cartlann SEC (2015-2024)</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card2-desc">
+                        Rochtain ghasta ar gach páipéar oifigiúil agus scéim marcála do na príomh-ábhair thar na 10 mbliana seo caite.
+                    </p>
+                    <div class="pt-2 flex items-center text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition">
+                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="switchTab('calc')" class="group bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-4">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-amber-500 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="card3-title">Áireamhán CAO</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="card3-desc">
+                        Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.
+                    </p>
+                    <div class="pt-2 flex items-center text-xs font-bold text-amber-600 group-hover:translate-x-1 transition">
+                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- TAB 1: QUESTION BANK -->
-        <section id="tab-qbank" class="tab-content space-y-6">
+        <section id="tab-qbank" class="tab-content hidden space-y-6">
             <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
                 <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
                     <i class="fa-solid fa-database"></i>
                 </div>
                 <div class="relative z-10 max-w-2xl">
                     <span class="bg-brand-500/20 text-brand-300 text-xs px-3 py-1 rounded-full border border-brand-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-bolt mr-1"></i> Bunachar Ceisteanna Live
+                        <i class="fa-solid fa-bolt mr-1"></i> Live Supabase DB
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Tobar Ceisteanna na hArdteiste</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="qbank-title">Tobar Ceisteanna na hArdteiste</h1>
+                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="qbank-desc">
                         Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.
                     </p>
                 </div>
@@ -88,18 +183,18 @@
             <!-- Question Filters -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ábhar</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
                     <select id="q-subject" onchange="fetchQuestionsFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all">Gach Ábhar (All Subjects)</option>
-                        <option value="Bitheolaíocht">Bitheolaíocht (Biology)</option>
-                        <option value="Matamaitic">Matamaitic (Maths)</option>
-                        <option value="Tíreolaíocht">Tíreolaíocht (Geography)</option>
-                        <option value="Fisic">Fisic (Physics)</option>
-                        <option value="Ceimic">Ceimic (Chemistry)</option>
+                        <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
+                        <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
+                        <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
+                        <option value="Tíreolaíocht" data-i18n="opt-geo">Tíreolaíocht (Geography)</option>
+                        <option value="Fisic" data-i18n="opt-phys">Fisic (Physics)</option>
+                        <option value="Ceimic" data-i18n="opt-chem">Ceimic (Chemistry)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cuardaigh Ceist</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-search">Cuardaigh Ceist</label>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
                         <input type="text" id="q-search" oninput="fetchQuestionsFromSupabase()" placeholder="M.sh. Fótasintéisiú, Ailgéabar, Cill..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 pl-10 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
@@ -110,7 +205,7 @@
             <div id="questions-container" class="space-y-4">
                 <div class="text-center py-12 text-slate-400">
                     <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                    <p class="text-sm">Ag lódáil ceisteanna...</p>
+                    <p class="text-sm" data-i18n="loading">Ag lódáil...</p>
                 </div>
             </div>
         </section>
@@ -125,8 +220,8 @@
                     <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
                         <i class="fa-solid fa-folder-open mr-1"></i> Cartlann Oifigiúil 2015–2024
                     </span>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Páipéir & Scéimeanna Marcála</h1>
-                    <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="sec-title">Páipéir & Scéimeanna Marcála</h1>
+                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="sec-desc">
                         Rochtain ghasta ar gach páipéar scrúduithe agus scéim marcála do na príomh-ábhair eolaíochta agus matamaitice.
                     </p>
                 </div>
@@ -135,20 +230,20 @@
             <!-- PDF Archive Filters -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ábhar</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
                     <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all">Gach Ábhar</option>
-                        <option value="Bitheolaíocht">Bitheolaíocht (Biology)</option>
-                        <option value="Matamaitic">Matamaitic (Maths)</option>
-                        <option value="Tíreolaíocht">Tíreolaíocht (Geography)</option>
-                        <option value="Fisic">Fisic (Physics)</option>
-                        <option value="Ceimic">Ceimic (Chemistry)</option>
+                        <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
+                        <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
+                        <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
+                        <option value="Tíreolaíocht" data-i18n="opt-geo">Tíreolaíocht (Geography)</option>
+                        <option value="Fisic" data-i18n="opt-phys">Fisic (Physics)</option>
+                        <option value="Ceimic" data-i18n="opt-chem">Ceimic (Chemistry)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bliain</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-year">Bliain</label>
                     <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all">Gach Bliain (2015 - 2024)</option>
+                        <option value="all" data-i18n="opt-all-years">Gach Bliain (2015 - 2024)</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -162,9 +257,9 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Leibhéal</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-level">Leibhéal</label>
                     <select id="sec-level" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all">Gach Leibhéal</option>
+                        <option value="all" data-i18n="opt-all-levels">Gach Leibhéal</option>
                         <option value="Ardleibhéal">Ardleibhéal (HL)</option>
                         <option value="Gnáthleibhéal">Gnáthleibhéal (OL)</option>
                     </select>
@@ -174,7 +269,58 @@
             <div id="sec-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="col-span-full text-center py-12 text-slate-400">
                     <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                    <p class="text-sm">Ag lódáil páipéir...</p>
+                    <p class="text-sm" data-i18n="loading">Ag lódáil...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: CAO POINTS CALCULATOR (SURPRISE FEATURE) -->
+        <section id="tab-calc" class="tab-content hidden space-y-6">
+            <div class="relative overflow-hidden bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
+                        <i class="fa-solid fa-calculator mr-1"></i> Áireamhán Scór
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="calc-title">Áireamhán Pointí CAO</h1>
+                    <p class="text-slate-300 text-sm mt-2 leading-relaxed" data-i18n="calc-desc">
+                        Roghnaigh na 6 thorthaí is fearr uait chun do phointí CAO iomlána a ríomh go huathoibríoch.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Inputs Section -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900" data-i18n="calc-subjects-heading">Torthaí do na hÁbhair</h3>
+                    
+                    <div id="subject-rows" class="space-y-3">
+                        <!-- Rows injected by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Live Results Summary Widget -->
+                <div class="bg-gradient-to-b from-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-xl border border-brand-800 flex flex-col justify-between h-fit sticky top-24">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-300" data-i18n="calc-score-label">Iomlán Pointí CAO</span>
+                        <div class="text-6xl font-extrabold text-white my-3" id="total-points">0</div>
+                        <p class="text-xs text-brand-200/80 leading-relaxed" data-i18n="calc-info">
+                            * Glactar leis na 6 thorthaí is airde. Cuirtear +25 bonnphointe le H1–H6 sa Mhatamaitic Ardleibhéil.
+                        </p>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-brand-800/80 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-300">
+                            <span data-i18n="calc-top6">Na 6 thorthaí is fearr:</span>
+                            <span id="top-6-count" class="font-bold text-white">0 ábhar</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span data-i18n="calc-bonus">Bonnphointí HL Maths:</span>
+                            <span id="maths-bonus-text" class="font-bold text-amber-400">+0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -189,13 +335,131 @@
     </footer>
 
     <script>
-        // LIVE SUPABASE CREDENTIALS
+        // SUPABASE CREDENTIALS
         const SUPABASE_URL = 'https://mwsnsnrgapaulessilsa.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_GLTAwJG8YnmRDLylbwBQiw_rPeTrROk';
-
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Fetch Questions
+        // LANGUAGE DICTIONARY
+        let currentLang = 'ga'; // default Irish
+        const i18n = {
+            ga: {
+                "nav-home": "Bhaile",
+                "nav-qbank": "Ceisteanna",
+                "nav-sec": "Cartlann SEC",
+                "nav-calc": "Pointí CAO",
+                "hero-badge": "Áiseanna Staidéir na hArdteiste",
+                "hero-title": "Do thuras Ardteiste, simplí",
+                "hero-desc": "Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: tobair ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.",
+                "hero-btn-q": "Cuardaigh Ceisteanna",
+                "hero-btn-calc": "Áireamhán CAO",
+                "card1-title": "Tobar Ceisteanna",
+                "card1-desc": "Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.",
+                "card2-title": "Cartlann SEC (2015-2024)",
+                "card2-desc": "Rochtain ghasta ar gach páipéar oifigiúil agus scéim marcála do na príomh-ábhair thar na 10 mbliana seo caite.",
+                "card3-title": "Áireamhán CAO",
+                "card3-desc": "Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.",
+                "card-explore": "Achoimre",
+                "qbank-title": "Tobar Ceisteanna na hArdteiste",
+                "qbank-desc": "Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.",
+                "sec-title": "Páipéir & Scéimeanna Marcála",
+                "sec-desc": "Rochtain ghasta ar gach páipéar scrúduithe agus scéim marcála do na príomh-ábhair.",
+                "filter-subject": "Ábhar",
+                "filter-search": "Cuardaigh Ceist",
+                "filter-year": "Bliain",
+                "filter-level": "Leibhéal",
+                "opt-all-subjects": "Gach Ábhar",
+                "opt-all-years": "Gach Bliain (2015 - 2024)",
+                "opt-all-levels": "Gach Leibhéal",
+                "opt-bio": "Bitheolaíocht (Biology)",
+                "opt-maths": "Matamaitic (Maths)",
+                "opt-geo": "Tíreolaíocht (Geography)",
+                "opt-phys": "Fisic (Physics)",
+                "opt-chem": "Ceimic (Chemistry)",
+                "loading": "Ag lódáil...",
+                "calc-title": "Áireamhán Pointí CAO",
+                "calc-desc": "Roghnaigh na 6 thorthaí is fearr uait chun do phointí CAO iomlána a ríomh go huathoibríoch.",
+                "calc-subjects-heading": "Torthaí do na hÁbhair",
+                "calc-score-label": "Iomlán Pointí CAO",
+                "calc-info": "* Glactar leis na 6 thorthaí is fearr. Cuirtear +25 bonnphointe le H1–H6 sa Mhatamaitic Ardleibhéil.",
+                "calc-top6": "Na 6 thorthaí is fearr:",
+                "calc-bonus": "Bonnphointí HL Maths:"
+            },
+            en: {
+                "nav-home": "Home",
+                "nav-qbank": "Questions",
+                "nav-sec": "SEC Archive",
+                "nav-calc": "CAO Points",
+                "hero-badge": "Leaving Cert Study Resources",
+                "hero-title": "Your Leaving Cert journey, simplified",
+                "hero-desc": "Everything you need for your Leaving Cert exams: question bank, official SEC archive, and CAO points calculator – in Irish and English.",
+                "hero-btn-q": "Search Questions",
+                "hero-btn-calc": "CAO Calculator",
+                "card1-title": "Question Bank",
+                "card1-desc": "Study exam questions by topic and subject with integrated marking schemes.",
+                "card2-title": "SEC Archive (2015-2024)",
+                "card2-desc": "Instant access to official past exam papers and marking schemes over the last 10 years.",
+                "card3-title": "CAO Points Calculator",
+                "card3-desc": "Calculate your CAO points quickly including Higher Level Maths bonus points.",
+                "card-explore": "Explore",
+                "qbank-title": "Leaving Cert Question Bank",
+                "qbank-desc": "Search exam questions by subject or key topic.",
+                "sec-title": "Exam Papers & Marking Schemes",
+                "sec-desc": "Quick access to all exam papers and marking schemes for core subjects.",
+                "filter-subject": "Subject",
+                "filter-search": "Search Question",
+                "filter-year": "Year",
+                "filter-level": "Level",
+                "opt-all-subjects": "All Subjects",
+                "opt-all-years": "All Years (2015 - 2024)",
+                "opt-all-levels": "All Levels",
+                "opt-bio": "Biology (Bitheolaíocht)",
+                "opt-maths": "Maths (Matamaitic)",
+                "opt-geo": "Geography (Tíreolaíocht)",
+                "opt-phys": "Physics (Fisic)",
+                "opt-chem": "Chemistry (Ceimic)",
+                "loading": "Loading...",
+                "calc-title": "CAO Points Calculator",
+                "calc-desc": "Select your best 6 grades to calculate your total CAO points automatically.",
+                "calc-subjects-heading": "Subject Results",
+                "calc-score-label": "Total CAO Points",
+                "calc-info": "* Based on your top 6 subjects. +25 bonus points automatically added for H1–H6 Higher Level Maths.",
+                "calc-top6": "Top 6 subjects count:",
+                "calc-bonus": "HL Maths Bonus Points:"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ga' ? 'en' : 'ga';
+            document.getElementById('lang-label').innerText = currentLang === 'ga' ? 'EN' : 'GA';
+            
+            // Translate static elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerText = i18n[currentLang][key];
+                }
+            });
+        }
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-brand-50', 'text-brand-700', 'shadow-sm');
+                el.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.add('bg-brand-50', 'text-brand-700', 'shadow-sm');
+            activeNav.classList.remove('text-slate-600');
+
+            if (tabId === 'sec') fetchSecPapersFromSupabase();
+            if (tabId === 'qbank') fetchQuestionsFromSupabase();
+        }
+
+        // SUPABASE QUESTION BANK FETCHING
         async function fetchQuestionsFromSupabase() {
             const subject = document.getElementById('q-subject').value;
             const search = document.getElementById('q-search').value.toLowerCase();
@@ -263,7 +527,7 @@
             });
         }
 
-        // Fetch Papers
+        // SUPABASE SEC PAPERS FETCHING
         async function fetchSecPapersFromSupabase() {
             const subject = document.getElementById('sec-subject').value;
             const year = document.getElementById('sec-year').value;
@@ -326,24 +590,77 @@
             el.classList.toggle('hidden');
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-brand-50', 'text-brand-700', 'shadow-sm');
-                el.classList.add('text-slate-600');
+        // SURPRISE FEATURE: CAO CALCULATOR LOGIC
+        const defaultSubjects = ['Matamaitic', 'Gaeilge', 'Béarla', 'Bitheolaíocht', 'Fisic', 'Tíreolaíocht', 'Ceimic'];
+        const hlPoints = { H1: 100, H2: 88, H3: 77, H4: 66, H5: 56, H6: 46, H7: 37, H8: 0, None: 0 };
+        const olPoints = { O1: 56, O2: 46, O3: 37, O4: 28, O5: 20, O6: 12, O7: 0, O8: 0, None: 0 };
+
+        function initCalculator() {
+            const container = document.getElementById('subject-rows');
+            container.innerHTML = '';
+
+            defaultSubjects.forEach((sub, idx) => {
+                container.innerHTML += `
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                        <input type="text" value="${sub}" class="bg-white border border-slate-200 rounded-lg p-2 text-sm font-semibold text-slate-800 outline-none">
+                        
+                        <select onchange="calculateCAO()" class="calc-level bg-white border border-slate-200 rounded-lg p-2 text-sm outline-none font-medium">
+                            <option value="HL">Ardleibhéal (HL)</option>
+                            <option value="OL">Gnáthleibhéal (OL)</option>
+                        </select>
+
+                        <select onchange="calculateCAO()" class="calc-grade bg-white border border-slate-200 rounded-lg p-2 text-sm outline-none font-medium">
+                            <option value="None">Roghnaigh Grád...</option>
+                            <option value="1">Grád 1 (H1/O1)</option>
+                            <option value="2">Grád 2 (H2/O2)</option>
+                            <option value="3">Grád 3 (H3/O3)</option>
+                            <option value="4">Grád 4 (H4/O4)</option>
+                            <option value="5">Grád 5 (H5/O5)</option>
+                            <option value="6">Grád 6 (H6/O6)</option>
+                            <option value="7">Grád 7 (H7/O7)</option>
+                            <option value="8">Grád 8 (H8/O8)</option>
+                        </select>
+                    </div>
+                `;
+            });
+        }
+
+        function calculateCAO() {
+            const rows = document.querySelectorAll('#subject-rows > div');
+            let scores = [];
+            let mathsBonus = 0;
+
+            rows.forEach(row => {
+                const name = row.querySelector('input').value.toLowerCase();
+                const level = row.querySelector('.calc-level').value;
+                const gradeVal = row.querySelector('.calc-grade').value;
+
+                if (gradeVal === 'None') return;
+
+                const code = (level === 'HL' ? 'H' : 'O') + gradeVal;
+                let pts = level === 'HL' ? (hlPoints[code] || 0) : (olPoints[code] || 0);
+
+                // Check Maths Bonus
+                if ((name.includes('matamaitic') || name.includes('math')) && level === 'HL' && parseInt(gradeVal) <= 6) {
+                    pts += 25;
+                    mathsBonus = 25;
+                }
+
+                scores.push(pts);
             });
 
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            activeNav.classList.add('bg-brand-50', 'text-brand-700', 'shadow-sm');
-            activeNav.classList.remove('text-slate-600');
+            // Sort descending and take top 6
+            scores.sort((a, b) => b - a);
+            const top6 = scores.slice(0, 6);
+            const total = top6.reduce((sum, val) => sum + val, 0);
 
-            if (tabId === 'sec') fetchSecPapersFromSupabase();
-            if (tabId === 'qbank') fetchQuestionsFromSupabase();
+            document.getElementById('total-points').innerText = total;
+            document.getElementById('top-6-count').innerText = `${top6.length} / 6`;
+            document.getElementById('maths-bonus-text').innerText = `+${mathsBonus}`;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchQuestionsFromSupabase();
+            initCalculator();
         });
     </script>
 </body>
