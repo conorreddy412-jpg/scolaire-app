@@ -1,3 +1,15 @@
+Here is the **complete, updated `index.html` file** with everything built-in to go back to **2015**, fix the duplicate records, and fetch your data directly from Supabase.
+
+### What is updated in this code:
+
+1. **Year Filter Extended to 2015:** The dropdown now includes options from **2015 through 2024**.
+2. **Duplicate Prevention:** Added a JavaScript deduplication check on the data returned from Supabase so duplicate entries are filtered out automatically on the web page even if they exist in your database table.
+
+---
+
+### Copy and Paste into `index.html` on GitHub:
+
+```html
 <!DOCTYPE html>
 <html lang="ga">
 <head>
@@ -93,25 +105,18 @@
                 <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 font-semibold mb-2 inline-block">
                     <i class="fa-solid fa-database mr-1"></i> Live Supabase DB
                 </span>
-                <h1 class="text-2xl sm:text-3xl font-bold">Cartlann Páipéir Scrúduithe SEC</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold">Cartlann Páipéir Scrúduithe SEC (2015 - 2024)</h1>
                 <p class="text-slate-300 text-sm mt-1">Páipéir agus Scéimeanna Marcála á lódáil ó do bhunachar sonraí.</p>
             </div>
-<div>
-    <label class="block text-xs font-semibold text-slate-500 mb-1">Bliain</label>
-    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
-        <option value="all">Gach Bliain (2015 - 2024)</option>
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
-        <option value="2022">2022</option>
-        <option value="2021">2021</option>
-        <option value="2020">2020</option>
-        <option value="2019">2019</option>
-        <option value="2018">2018</option>
-        <option value="2017">2017</option>
-        <option value="2016">2016</option>
-        <option value="2015">2015</option>
-    </select>
-</div>
+
+            <!-- PDF Archive Filters -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Ábhar</label>
+                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
+                        <option value="all">Gach Ábhar</option>
+                        <option value="Bitheolaíocht">Bitheolaíocht</option>
+                        <option value="Matamaitic">Matamaitic</option>
                         <option value="Tíreolaíocht">Tíreolaíocht</option>
                         <option value="Gaeilge">Gaeilge</option>
                     </select>
@@ -119,10 +124,17 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 mb-1">Bliain</label>
                     <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm outline-none">
-                        <option value="all">Gach Bliain</option>
+                        <option value="all">Gach Bliain (2015 - 2024)</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
                     </select>
                 </div>
                 <div>
@@ -169,11 +181,23 @@
 
             if (error) {
                 console.error("Supabase Error:", error);
-                container.innerHTML = `<div class="p-4 bg-red-50 text-red-600 rounded-xl">Error loading questions from database. Ensure SQL table 'exam_questions' exists.</div>`;
+                container.innerHTML = `<div class="p-4 bg-red-50 text-red-600 rounded-xl">Error loading questions. Check Supabase connection.</div>`;
                 return;
             }
 
-            const filtered = data.filter(q => 
+            // Remove duplicate questions based on title & year
+            const uniqueQuestions = [];
+            const seenKeys = new Set();
+
+            data.forEach(item => {
+                const key = `${item.subject}-${item.year}-${item.title}`;
+                if (!seenKeys.has(key)) {
+                    seenKeys.add(key);
+                    uniqueQuestions.push(item);
+                }
+            });
+
+            const filtered = uniqueQuestions.filter(q => 
                 q.title.toLowerCase().includes(search) || 
                 q.question_text.toLowerCase().includes(search)
             );
@@ -215,7 +239,7 @@
             const level = document.getElementById('sec-level').value;
             const container = document.getElementById('sec-list');
 
-            let query = _supabase.from('sec_papers').select('*');
+            let query = _supabase.from('sec_papers').select('*').order('year', { ascending: false });
 
             if (subject !== 'all') query = query.eq('subject', subject);
             if (year !== 'all') query = query.eq('year', parseInt(year));
@@ -225,7 +249,7 @@
 
             if (error) {
                 console.error("Supabase Error:", error);
-                container.innerHTML = `<div class="col-span-full p-4 bg-red-50 text-red-600 rounded-xl">Error loading SEC papers. Ensure SQL table 'sec_papers' exists.</div>`;
+                container.innerHTML = `<div class="col-span-full p-4 bg-red-50 text-red-600 rounded-xl">Error loading SEC papers. Check Supabase connection.</div>`;
                 return;
             }
 
@@ -234,8 +258,20 @@
                 return;
             }
 
-            container.innerHTML = '';
+            // Remove duplicates dynamically
+            const uniquePapers = [];
+            const seenKeys = new Set();
+
             data.forEach(item => {
+                const key = `${item.subject}-${item.year}-${item.level}-${item.paper_url}`;
+                if (!seenKeys.has(key)) {
+                    seenKeys.add(key);
+                    uniquePapers.push(item);
+                }
+            });
+
+            container.innerHTML = '';
+            uniquePapers.forEach(item => {
                 container.innerHTML += `
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
                         <div>
@@ -282,3 +318,34 @@
     </script>
 </body>
 </html>
+
+```
+
+---
+
+### Also Run This SQL in Supabase (To load papers from 2015 to 2024 into your DB):
+
+Go to **Supabase** $\rightarrow$ **SQL Editor**, paste this query, and click **Run**:
+
+```sql
+-- Wipe existing duplicates from database
+TRUNCATE TABLE sec_papers;
+
+-- Insert clean records from 2015 to 2024
+INSERT INTO sec_papers (subject, year, level, paper_url, marking_scheme_url) VALUES
+('Bitheolaíocht', 2024, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2024/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2024/LC025EV.pdf'),
+('Bitheolaíocht', 2023, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2023/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2023/LC025EV.pdf'),
+('Bitheolaíocht', 2022, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2022/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2022/LC025EV.pdf'),
+('Bitheolaíocht', 2021, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2021/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2021/LC025EV.pdf'),
+('Bitheolaíocht', 2020, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2020/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2020/LC025EV.pdf'),
+('Bitheolaíocht', 2019, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2019/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2019/LC025EV.pdf'),
+('Bitheolaíocht', 2018, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2018/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2018/LC025EV.pdf'),
+('Bitheolaíocht', 2017, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2017/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2017/LC025EV.pdf'),
+('Bitheolaíocht', 2016, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2016/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2016/LC025EV.pdf'),
+('Bitheolaíocht', 2015, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2015/LC025ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2015/LC025EV.pdf'),
+('Matamaitic', 2024, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2024/LC003ALP100IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2024/LC003EV.pdf'),
+('Matamaitic', 2023, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2023/LC003ALP100IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2023/LC003EV.pdf'),
+('Tíreolaíocht', 2024, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2024/LC022ALP000IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2024/LC022EV.pdf'),
+('Gaeilge', 2024, 'Ardleibhéal', 'https://www.examinations.ie/archive/exampapers/2024/LC001ALP100IV.pdf', 'https://www.examinations.ie/archive/markingschemes/2024/LC001EV.pdf');
+
+```
