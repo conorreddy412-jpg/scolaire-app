@@ -1,1074 +1,252 @@
 <!DOCTYPE html>
-<html lang="ga">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoláire | Áiseanna Staidéir don Ardteistiméireacht</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style> 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; } 
-        /* Hide scrollbars for clean horizontal scrolling nav on mobile */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scolaire App</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --accent-color: #2563eb;
+      --border-color: #e5e7eb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      color: #111827;
+    }
+
+    /* Calculator Styles */
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .result-box {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #1e40af;
+    }
+
+    /* Scale Guide Table */
+    .scale-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .scale-table th, .scale-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      text-align: center;
+    }
+
+    .scale-table th {
+      background-color: #f8fafc;
+    }
+
+    /* Notes Section Styles */
+    .notes-section {
+      line-height: 1.6;
+    }
+
+    .notes-section h3 {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 6px;
+      margin-top: 20px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
-<body class="bg-slate-50/50 text-slate-800 min-h-screen flex flex-col antialiased">
+<body>
+
+<div class="container">
+
+  <!-- CAO Points Calculator Section -->
+  <div class="card">
+    <h2>Leaving Certificate CAO Points Calculator</h2>
+    <p>Select your top 6 subjects to calculate your total points score.</p>
+    
+    <div class="calculator-grid" id="subjects-container">
+      <!-- Generated via JS -->
+    </div>
+
+    <div class="result-box">
+      Total CAO Points: <span id="total-points">0</span> / 625
+    </div>
+
+    <details style="margin-top: 15px;">
+      <summary style="cursor: pointer; font-weight: 600; color: var(--accent-color);">View Points Scale Reference</summary>
+      <table class="scale-table">
+        <thead>
+          <tr>
+            <th>Grade</th>
+            <th>Percentage</th>
+            <th>Higher Level (HL)</th>
+            <th>Ordinary Level (OL)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>H1 / O1</td><td>90% – 100%</td><td>100 pts</td><td>56 pts</td></tr>
+          <tr><td>H2 / O2</td><td>80% – 89%</td><td>88 pts</td><td>46 pts</td></tr>
+          <tr><td>H3 / O3</td><td>70% – 79%</td><td>77 pts</td><td>37 pts</td></tr>
+          <tr><td>H4 / O4</td><td>60% – 69%</td><td>66 pts</td><td>28 pts</td></tr>
+          <tr><td>H5 / O5</td><td>50% – 59%</td><td>56 pts</td><td>20 pts</td></tr>
+          <tr><td>H6 / O6</td><td>40% – 49%</td><td>46 pts</td><td>12 pts</td></tr>
+          <tr><td>H7 / O7</td><td>30% – 39%</td><td>37 pts</td><td>0 pts</td></tr>
+          <tr><td>H8 / O8</td><td>0% – 29%</td><td>0 pts</td><td>0 pts</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </div>
+
+  <!-- Study Notes Section -->
+  <div class="card notes-section">
+    <h2>Biology Study Notes</h2>
+    
+    <h3>Photosynthesis</h3>
+    <p><strong>Definition:</strong> The process by which green plants convert light energy into chemical energy (glucose) using carbon dioxide, water, and chlorophyll.</p>
+    
+    <p><strong>Equation:</strong></p>
+    <p><code>6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂</code></p>
+
+    <h4>Key Stages:</h4>
+    <ul>
+      <li><strong>Light-Dependent Stage (Light Stage):</strong>
+        <ul>
+          <li>Occurs in the <em>thylakoid membranes</em> of chloroplasts.</li>
+          <li>Requires light energy to split water molecules (photolysis) into oxygen, protons (H⁺), and electrons.</li>
+          <li>Produces ATP and NADPH for the dark stage.</li>
+        </ul>
+      </li>
+      <li><strong>Light-Independent Stage (Dark Stage / Calvin Cycle):</strong>
+        <ul>
+          <li>Occurs in the <em>stroma</em> of chloroplasts.</li>
+          <li>Controlled by enzymes (temperature-dependent).</li>
+          <li>Uses CO₂, ATP, and NADPH to synthesize glucose.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h4>Factors Affecting Photosynthesis:</h4>
+    <ul>
+      <li><strong>Light Intensity:</strong> Increases the rate up to a saturation point.</li>
+      <li><strong>Carbon Dioxide Concentration:</strong> Primary limiting factor in natural environments.</li>
+      <li><strong>Temperature:</strong> Affects enzyme activity in the dark stage (optimum ~25°C–30°C).</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  const pointsScale = {
+    'H1': 100, 'H2': 88, 'H3': 77, 'H4': 66, 'H5': 56, 'H6': 46, 'H7': 37, 'H8': 0,
+    'O1': 56,  'O2': 46, 'O3': 37, 'O4': 28, 'O5': 20, 'O6': 12, 'O7': 0,  'O8': 0,
+    'None': 0
+  };
+
+  const container = document.getElementById('subjects-container');
+
+  // Render 6 subject select menus
+  for (let i = 1; i <= 6; i++) {
+    const div = document.createElement('div');
+    div.className = 'form-group';
+    div.innerHTML = `
+      <label for="subject-${i}">Subject ${i}</label>
+      <select id="subject-${i}" onchange="calculatePoints()">
+        <option value="None">-- Select Grade --</option>
+        <optgroup label="Higher Level">
+          <option value="H1">H1 (90–100%) - 100 pts</option>
+          <option value="H2">H2 (80–89%) - 88 pts</option>
+          <option value="H3">H3 (70–79%) - 77 pts</option>
+          <option value="H4">H4 (60–69%) - 66 pts</option>
+          <option value="H5">H5 (50–59%) - 56 pts</option>
+          <option value="H6">H6 (40–49%) - 46 pts</option>
+          <option value="H7">H7 (30–39%) - 37 pts</option>
+          <option value="H8">H8 (0–29%) - 0 pts</option>
+        </optgroup>
+        <optgroup label="Ordinary Level">
+          <option value="O1">O1 (90–100%) - 56 pts</option>
+          <option value="O2">O2 (80–89%) - 46 pts</option>
+          <option value="O3">O3 (70–79%) - 37 pts</option>
+          <option value="O4">O4 (60–69%) - 28 pts</option>
+          <option value="O5">O5 (50–59%) - 20 pts</option>
+          <option value="O6">O6 (40–49%) - 12 pts</option>
+          <option value="O7">O7 (30–39%) - 0 pts</option>
+          <option value="O8">O8 (0–29%) - 0 pts</option>
+        </optgroup>
+      </select>
+    `;
+    container.appendChild(div);
+  }
+
+  function calculatePoints() {
+    let total = 0;
+    for (let i = 1; i <= 6; i++) {
+      const val = document.getElementById(`subject-${i}`).value;
+      total += pointsScale[val] || 0;
+    }
+    document.getElementById('total-points').textContent = total;
+  }
+</script>
 
-    <!-- Navigation Header -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2.5 cursor-pointer flex-shrink-0" onclick="switchTab('home')">
-                    <div class="bg-gradient-to-tr from-brand-700 to-brand-500 text-white w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <span class="font-extrabold text-lg sm:text-xl text-slate-900 tracking-tight">Scoláire</span>
-                        <span class="hidden sm:inline-block ml-1.5 bg-brand-100/80 text-brand-800 text-[10px] px-2 py-0.5 rounded-full font-bold border border-brand-200 uppercase tracking-wider">
-                            Ardteist
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Navigation Tabs (Horizontally scrollable on mobile) -->
-                <nav class="flex items-center space-x-1 overflow-x-auto no-scrollbar py-2 px-1 max-w-[60vw] sm:max-w-none">
-                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 bg-brand-50 text-brand-700 shadow-sm flex-shrink-0">
-                        <i class="fa-solid fa-house"></i>
-                        <span data-i18n="nav-home">Bhaile</span>
-                    </button>
-                    <button id="nav-notes" onclick="switchTab('notes')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
-                        <i class="fa-solid fa-book-bookmark"></i>
-                        <span data-i18n="nav-notes">Nótaí</span>
-                    </button>
-                    <button id="nav-qbank" onclick="switchTab('qbank')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
-                        <i class="fa-solid fa-book-open"></i>
-                        <span data-i18n="nav-qbank">Ceisteanna</span>
-                    </button>
-                    <button id="nav-sec" onclick="switchTab('sec')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
-                        <i class="fa-solid fa-file-pdf"></i>
-                        <span data-i18n="nav-sec">Cartlann SEC</span>
-                    </button>
-                    <button id="nav-calc" onclick="switchTab('calc')" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex-shrink-0">
-                        <i class="fa-solid fa-calculator"></i>
-                        <span data-i18n="nav-calc">Pointí CAO</span>
-                    </button>
-                </nav>
-
-                <!-- Language Switcher Toggle -->
-                <div class="pl-2 border-l border-slate-200 ml-1 flex-shrink-0">
-                    <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-2.5 py-2 rounded-xl transition border border-slate-200">
-                        <i class="fa-solid fa-globe text-brand-600"></i>
-                        <span id="lang-label">EN</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-
-        <!-- TAB 0: HOME PAGE -->
-        <section id="tab-home" class="tab-content space-y-8 sm:space-y-10">
-            <!-- Hero Banner -->
-            <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 text-white p-6 sm:p-12 rounded-3xl shadow-xl border border-slate-800">
-                <div class="absolute -right-16 -bottom-16 opacity-10 text-[220px] text-brand-400 pointer-events-none">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div class="relative z-10 max-w-3xl space-y-4 sm:space-y-6">
-                    <span class="bg-brand-500/20 text-brand-300 text-xs px-3.5 py-1.5 rounded-full border border-brand-500/30 font-semibold inline-flex items-center backdrop-blur-sm">
-                        <i class="fa-solid fa-sparkles mr-2 text-amber-400"></i>
-                        <span data-i18n="hero-badge">Áiseanna Staidéir na hArdteiste</span>
-                    </span>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight" data-i18n="hero-title">
-                        Do thuras Ardteiste, simplí
-                    </h1>
-                    <p class="text-slate-300 text-sm sm:text-lg leading-relaxed max-w-2xl" data-i18n="hero-desc">
-                        Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: nótaí Athbhreithnithe, tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                        <button onclick="switchTab('notes')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition flex items-center justify-center space-x-2 text-sm sm:text-base">
-                            <i class="fa-solid fa-book-bookmark"></i>
-                            <span data-i18n="hero-btn-notes">Déan Staidéar ar Nótaí</span>
-                        </button>
-                        <button onclick="switchTab('calc')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center justify-center space-x-2 backdrop-blur-sm text-sm sm:text-base">
-                            <i class="fa-solid fa-calculator"></i>
-                            <span data-i18n="hero-btn-calc">Áireamhán CAO</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Feature Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                <!-- Card Notes -->
-                <div onclick="switchTab('notes')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
-                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-book-bookmark"></i>
-                    </div>
-                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card0-title">Nótaí Athbhreithnithe</h3>
-                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card0-desc">
-                        Nótaí cuimsitheacha ar gach caibidil le leathanaigh tiomnaithe. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.
-                    </p>
-                    <div class="pt-2 flex items-center text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition">
-                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </div>
-                </div>
-
-                <!-- Card 1 -->
-                <div onclick="switchTab('qbank')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
-                    <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-brand-600 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card1-title">Tobar Ceisteanna</h3>
-                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card1-desc">
-                        Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.
-                    </p>
-                    <div class="pt-2 flex items-center text-xs font-bold text-brand-600 group-hover:translate-x-1 transition">
-                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div onclick="switchTab('sec')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card2-title">Cartlann SEC (2015-2024)</h3>
-                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card2-desc">
-                        Rochtain ghasta ar gach páipéar oifigiúil agus scéim marcála do na príomh-ábhair thar na 10 mbliana seo caite.
-                    </p>
-                    <div class="pt-2 flex items-center text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition">
-                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div onclick="switchTab('calc')" class="group bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer space-y-3 sm:space-y-4">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-2xl group-hover:bg-amber-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-calculator"></i>
-                    </div>
-                    <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="card3-title">Áireamhán CAO</h3>
-                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" data-i18n="card3-desc">
-                        Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.
-                    </p>
-                    <div class="pt-2 flex items-center text-xs font-bold text-amber-600 group-hover:translate-x-1 transition">
-                        <span data-i18n="card-explore">Achoimre</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: NOTES SECTION -->
-        <section id="tab-notes" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </div>
-                <div class="relative z-10 max-w-2xl">
-                    <span class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-graduation-cap mr-1"></i> Athbhreithniú Ardteiste
-                    </span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="notes-title">Nótaí Staidéir na hArdteiste</h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="notes-desc">
-                        Roghnaigh caibidil thíos chun leathanach tiomnaithe na caibidle sin a oscailt le go leor spáis do do chuid nótaí.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Subject Selector Header -->
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="w-full sm:w-1/2">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="notes-select-subject">Roghnaigh Ábhar / Select Subject</label>
-                    <select id="notes-subject-select" onchange="renderSubjectNotes()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="biology"> Bitheolaíocht (Biology) - Unit 2 Complete</option>
-                        <option value="maths" disabled> Matamaitic (Maths) - Coming Soon</option>
-                        <option value="chemistry" disabled> Ceimic (Chemistry) - Coming Soon</option>
-                        <option value="physics" disabled> Fisic (Physics) - Coming Soon</option>
-                        <option value="geography" disabled> Tíreolaíocht (Geography) - Coming Soon</option>
-                    </select>
-                </div>
-                <div class="text-xs text-slate-500 font-medium self-stretch sm:self-center text-left sm:text-right">
-                    <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200 inline-block">
-                        <i class="fa-solid fa-circle-info mr-1"></i> <span id="chapters-count-badge">11 Caibidil Ar Fáil</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Chapters List Container (Clicking opens dedicated chapter page view) -->
-            <div id="notes-chapters-container" class="space-y-3">
-                <!-- Dynamic chapter rows -->
-            </div>
-        </section>
-
-        <!-- TAB: DEDICATED CHAPTER DETAIL VIEW (Extra Page per Chapter) -->
-        <section id="tab-chapter-detail" class="tab-content hidden space-y-6">
-            <div class="flex items-center justify-between">
-                <button onclick="switchTab('notes')" class="inline-flex items-center text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-100 px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-sm transition">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> <span data-i18n="back-to-notes">Ar Ais chuig na Nótaí</span>
-                </button>
-                <span id="chapter-badge-subject" class="bg-brand-100 text-brand-800 text-xs font-bold px-3 py-1.5 rounded-xl border border-brand-200">Bitheolaíocht - Aonad 2</span>
-            </div>
-
-            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-sm space-y-8">
-                <!-- Chapter Header -->
-                <div class="border-b border-slate-100 pb-6 space-y-2">
-                    <span id="chapter-detail-number" class="text-xs font-extrabold text-brand-600 uppercase tracking-widest">Caibidil</span>
-                    <h1 id="chapter-detail-title" class="text-2xl sm:text-4xl font-extrabold text-slate-900"></h1>
-                    <p id="chapter-detail-subtitle" class="text-sm sm:text-base text-slate-500 font-medium"></p>
-                </div>
-
-                <!-- Main Comprehensive Content Space -->
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-book-open-reader text-brand-600 mr-2"></i> <span data-i18n="notes-comprehensive">Nótaí Cuimsitheacha & Mionsonraí</span>
-                    </h3>
-                    <div id="chapter-detail-points" class="space-y-3">
-                        <!-- Dynamic rich points -->
-                    </div>
-                </div>
-
-                <!-- Personal Scratchpad / Notes Section -->
-                <div class="pt-6 border-t border-slate-100 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                            <i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> <span data-i18n="student-notes-heading">Do Chuid Nótaí Féin / Smaointe Scrúdaithe</span>
-                        </h3>
-                        <span class="text-xs text-slate-400 font-medium" data-i18n="auto-saved">Sábháladh go huathoibríoch ar an ngléas seo</span>
-                    </div>
-                    <textarea id="student-chapter-notes" rows="6" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition" placeholder="Scríobh do chuid nótaí féin, sainmhínithe breise nó cleachtaí anseo..."></textarea>
-                    <div class="flex justify-end">
-                        <button onclick="saveStudentNotes()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition flex items-center space-x-2">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <span data-i18n="save-notes">Sábháil Nótaí</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 1: QUESTION BANK -->
-        <section id="tab-qbank" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
-                    <i class="fa-solid fa-database"></i>
-                </div>
-                <div class="relative z-10 max-w-2xl">
-                    <span class="bg-brand-500/20 text-brand-300 text-xs px-3 py-1 rounded-full border border-brand-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-bolt mr-1"></i> Live Supabase DB
-                    </span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="qbank-title">Tobar Ceisteanna na hArdteiste</h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="qbank-desc">
-                        Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Question Filters -->
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
-                    <select id="q-subject" onchange="fetchQuestionsFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
-                        <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
-                        <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
-                        <option value="Tíreolaíocht" data-i18n="opt-geo">Tíreolaíocht (Geography)</option>
-                        <option value="Fisic" data-i18n="opt-phys">Fisic (Physics)</option>
-                        <option value="Ceimic" data-i18n="opt-chem">Ceimic (Chemistry)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-search">Cuardaigh Ceist</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="q-search" oninput="fetchQuestionsFromSupabase()" placeholder="M.sh. Fótasintéisiú, Ailgéabar, Cill..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 pl-10 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                    </div>
-                </div>
-            </div>
-
-            <div id="questions-container" class="space-y-4">
-                <div class="text-center py-12 text-slate-400">
-                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                    <p class="text-sm" data-i18n="loading">Ag lódáil...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: SEC ARCHIVE -->
-        <section id="tab-sec" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
-                    <i class="fa-solid fa-archive"></i>
-                </div>
-                <div class="relative z-10 max-w-2xl">
-                    <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-folder-open mr-1"></i> Cartlann Oifigiúil 2015–2024
-                    </span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="sec-title">Páipéir & Scéimeanna Marcála</h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="sec-desc">
-                        Rochtain ghasta ar gach páipéar scrúduithe agus scéim marcála do na príomh-ábhair eolaíochta agus matamaitice.
-                    </p>
-                </div>
-            </div>
-
-            <!-- PDF Archive Filters -->
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-subject">Ábhar</label>
-                    <select id="sec-subject" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all" data-i18n="opt-all-subjects">Gach Ábhar</option>
-                        <option value="Bitheolaíocht" data-i18n="opt-bio">Bitheolaíocht (Biology)</option>
-                        <option value="Matamaitic" data-i18n="opt-maths">Matamaitic (Maths)</option>
-                        <option value="Tíreolaíocht" data-i18n="opt-geo">Tíreolaíocht (Geography)</option>
-                        <option value="Fisic" data-i18n="opt-phys">Fisic (Physics)</option>
-                        <option value="Ceimic" data-i18n="opt-chem">Ceimic (Chemistry)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-year">Bliain</label>
-                    <select id="sec-year" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all" data-i18n="opt-all-years">Gach Bliain (2015 - 2024)</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="2017">2017</option>
-                        <option value="2016">2016</option>
-                        <option value="2015">2015</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="filter-level">Leibhéal</label>
-                    <select id="sec-level" onchange="fetchSecPapersFromSupabase()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm font-medium outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                        <option value="all" data-i18n="opt-all-levels">Gach Leibhéal</option>
-                        <option value="Ardleibhéal">Ardleibhéal (HL)</option>
-                        <option value="Gnáthleibhéal">Gnáthleibhéal (OL)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="sec-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="col-span-full text-center py-12 text-slate-400">
-                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                    <p class="text-sm" data-i18n="loading">Ag lódáil...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: CAO POINTS CALCULATOR -->
-        <section id="tab-calc" class="tab-content hidden space-y-6">
-            <div class="relative overflow-hidden bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white">
-                    <i class="fa-solid fa-calculator"></i>
-                </div>
-                <div class="relative z-10 max-w-2xl">
-                    <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold mb-3 inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-calculator mr-1"></i> Áireamhán Scór
-                    </span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white" data-i18n="calc-title">Áireamhán Pointí CAO</h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed" data-i18n="calc-desc">
-                        Roghnaigh na 6 thorthaí is fearr uait chun do phointí CAO iomlána a ríomh go huathoibríoch.
-                    </p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Inputs Section -->
-                <div class="lg:col-span-2 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-900" data-i18n="calc-subjects-heading">Torthaí do na hÁbhair</h3>
-                    
-                    <div id="subject-rows" class="space-y-3">
-                        <!-- Rows injected by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Live Results Summary Widget -->
-                <div class="bg-gradient-to-b from-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-xl border border-brand-800 flex flex-col justify-between h-fit lg:sticky lg:top-24">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-300" data-i18n="calc-score-label">Iomlán Pointí CAO</span>
-                        <div class="text-5xl sm:text-6xl font-extrabold text-white my-3" id="total-points">0</div>
-                        <p class="text-xs text-brand-200/80 leading-relaxed" data-i18n="calc-info">
-                            * Glactar leis na 6 thorthaí is airde. Cuirtear +25 bonnphointe le H1–H6 sa Mhatamaitic Ardleibhéil.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-6 border-t border-brand-800/80 space-y-2 text-xs">
-                        <div class="flex justify-between text-slate-300">
-                            <span data-i18n="calc-top6">Na 6 thorthaí is fearr:</span>
-                            <span id="top-6-count" class="font-bold text-white">0 ábhar</span>
-                        </div>
-                        <div class="flex justify-between text-slate-300">
-                            <span data-i18n="calc-bonus">Bonnphointí HL Maths:</span>
-                            <span id="maths-bonus-text" class="font-bold text-amber-400">+0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-6 sm:py-8 border-t border-slate-800 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
-            <p class="font-medium">&copy; 2026 Scoláire. Áiseanna Staidéir don Ardteistiméireacht.</p>
-        </div>
-    </footer>
-
-    <script>
-        // SUPABASE CREDENTIALS
-        const SUPABASE_URL = 'https://mwsnsnrgapaulessilsa.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_GLTAwJG8YnmRDLylbwBQiw_rPeTrROk';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // LANGUAGE DICTIONARY
-        let currentLang = 'ga'; // default Irish
-        const i18n = {
-            ga: {
-                "nav-home": "Bhaile",
-                "nav-notes": "Nótaí",
-                "nav-qbank": "Ceisteanna",
-                "nav-sec": "Cartlann SEC",
-                "nav-calc": "Pointí CAO",
-                "hero-badge": "Áiseanna Staidéir na hArdteiste",
-                "hero-title": "Do thuras Ardteiste, simplí",
-                "hero-desc": "Gach rud a bhfuil uait le haghaidh scrúduithe na hArdteiste: nótaí Athbhreithnithe, tobar ceisteanna, cartlann oifigiúil SEC, agus áireamhán pointí CAO – i nGaeilge agus i mBéarla.",
-                "hero-btn-notes": "Déan Staidéar ar Nótaí",
-                "hero-btn-calc": "Áireamhán CAO",
-                "card0-title": "Nótaí Athbhreithnithe",
-                "card0-desc": "Nótaí cuimsitheacha ar gach caibidil le leathanaigh tiomnaithe. Cuimsíonn sé Aonad 2 de Bitheolaíocht na hArdteiste ar fad.",
-                "card1-title": "Tobar Ceisteanna",
-                "card1-desc": "Déan staidéar ar cheisteanna scrúdaithe de réir téama agus ábhair. Le scéimeanna marcála comhtháite.",
-                "card2-title": "Cartlann SEC (2015-2024)",
-                "card2-desc": "Rochtain ghasta ar gach páipéar oifigiúil agus scéim marcála do na príomh-ábhair thar na 10 mbliana seo caite.",
-                "card3-title": "Áireamhán CAO",
-                "card3-desc": "Ríomh do phointí CAO go tapa lena n-áirítear na 25 bonnphointe do Mhatamaitic Ardleibhéil.",
-                "card-explore": "Achoimre",
-                "notes-title": "Nótaí Staidéir na hArdteiste",
-                "notes-desc": "Roghnaigh caibidil thíos chun leathanach tiomnaithe na caibidle sin a oscailt le go leor spáis do do chuid nótaí.",
-                "notes-select-subject": "Roghnaigh Ábhar",
-                "back-to-notes": "Ar Ais chuig na Nótaí",
-                "notes-comprehensive": "Nótaí Cuimsitheacha & Mionsonraí",
-                "student-notes-heading": "Do Chuid Nótaí Féin / Smaointe Scrúdaithe",
-                "auto-saved": "Sábháladh go huathoibríoch ar an ngléas seo",
-                "save-notes": "Sábháil Nótaí",
-                "qbank-title": "Tobar Ceisteanna na hArdteiste",
-                "qbank-desc": "Cuardaigh ceisteanna scrúduithe de réir ábhair nó téama.",
-                "sec-title": "Páipéir & Scéimeanna Marcála",
-                "sec-desc": "Rochtain ghasta ar gach páipéar scrúduithe agus scéim marcála do na príomh-ábhair.",
-                "filter-subject": "Ábhar",
-                "filter-search": "Cuardaigh Ceist",
-                "filter-year": "Bliain",
-                "filter-level": "Leibhéal",
-                "opt-all-subjects": "Gach Ábhar",
-                "opt-all-years": "Gach Bliain (2015 - 2024)",
-                "opt-all-levels": "Gach Leibhéal",
-                "opt-bio": "Bitheolaíocht (Biology)",
-                "opt-maths": "Matamaitic (Maths)",
-                "opt-geo": "Tíreolaíocht (Geography)",
-                "opt-phys": "Fisic (Physics)",
-                "opt-chem": "Ceimic (Chemistry)",
-                "loading": "Ag lódáil...",
-                "calc-title": "Áireamhán Pointí CAO",
-                "calc-desc": "Roghnaigh na 6 thorthaí is fearr uait chun do phointí CAO iomlána a ríomh go huathoibríoch.",
-                "calc-subjects-heading": "Torthaí do na hÁbhair",
-                "calc-score-label": "Iomlán Pointí CAO",
-                "calc-info": "* Glactar leis na 6 thorthaí is airde. Cuirtear +25 bonnphointe le H1–H6 sa Mhatamaitic Ardleibhéil.",
-                "calc-top6": "Na 6 thorthaí is fearr:",
-                "calc-bonus": "Bonnphointí HL Maths:"
-            },
-            en: {
-                "nav-home": "Home",
-                "nav-notes": "Notes",
-                "nav-qbank": "Questions",
-                "nav-sec": "SEC Archive",
-                "nav-calc": "CAO Points",
-                "hero-badge": "Leaving Cert Study Resources",
-                "hero-title": "Your Leaving Cert journey, simplified",
-                "hero-desc": "Everything you need for your Leaving Cert exams: revision notes, question bank, official SEC archive, and CAO points calculator – in Irish and English.",
-                "hero-btn-notes": "Study Revision Notes",
-                "hero-btn-calc": "CAO Calculator",
-                "card0-title": "Revision Notes",
-                "card0-desc": "Comprehensive revision notes with dedicated pages for every chapter. Includes full Unit 2 for Leaving Cert Biology.",
-                "card1-title": "Question Bank",
-                "card1-desc": "Study exam questions by topic and subject with integrated marking schemes.",
-                "card2-title": "SEC Archive (2015-2024)",
-                "card2-desc": "Instant access to official past exam papers and marking schemes over the last 10 years.",
-                "card3-title": "CAO Points Calculator",
-                "card3-desc": "Calculate your CAO points quickly including Higher Level Maths bonus points.",
-                "card-explore": "Explore",
-                "notes-title": "Leaving Cert Study Notes",
-                "notes-desc": "Select a chapter below to open its dedicated page with plenty of space for your revision notes.",
-                "notes-select-subject": "Select Subject",
-                "back-to-notes": "Back to Notes",
-                "notes-comprehensive": "Comprehensive Notes & Key Details",
-                "student-notes-heading": "Your Personal Notes / Exam Thoughts",
-                "auto-saved": "Auto-saves locally on this device",
-                "save-notes": "Save Notes",
-                "qbank-title": "Leaving Cert Question Bank",
-                "qbank-desc": "Search exam questions by subject or key topic.",
-                "sec-title": "Exam Papers & Marking Schemes",
-                "sec-desc": "Quick access to all exam papers and marking schemes for core subjects.",
-                "filter-subject": "Subject",
-                "filter-search": "Search Question",
-                "filter-year": "Year",
-                "filter-level": "Level",
-                "opt-all-subjects": "All Subjects",
-                "opt-all-years": "All Years (2015 - 2024)",
-                "opt-all-levels": "All Levels",
-                "opt-bio": "Biology (Bitheolaíocht)",
-                "opt-maths": "Maths (Matamaitic)",
-                "opt-geo": "Geography (Tíreolaíocht)",
-                "opt-phys": "Physics (Fisic)",
-                "opt-chem": "Chemistry (Ceimic)",
-                "loading": "Loading...",
-                "calc-title": "CAO Points Calculator",
-                "calc-desc": "Select your best 6 grades to calculate your total CAO points automatically.",
-                "calc-subjects-heading": "Subject Results",
-                "calc-score-label": "Total CAO Points",
-                "calc-info": "* Based on your top 6 subjects. +25 bonus points automatically added for H1–H6 Higher Level Maths.",
-                "calc-top6": "Top 6 subjects count:",
-                "calc-bonus": "HL Maths Bonus Points:"
-            }
-        };
-
-        // BIOLOGY UNIT 2 REVISION DATA
-        const biologyUnit2Data = [
-            {
-                id: 'ch-cell',
-                titleGa: 'Caibidil 2.1: An Cill (The Cell)',
-                titleEn: 'Chapter 2.1: The Cell',
-                subtitle: 'Cell Structure, Organelles & Cell Types',
-                keyPointsGa: [
-                    '<strong>Prokaryotic Cells:</strong> Níl núicléas atá timpeallaithe ag scannán acu agus níl orgánaigh atá timpeallaithe ag scannán acu (m.sh., Baictéir).',
-                    '<strong>Eukaryotic Cells:</strong> Tá núicléas atá timpeallaithe ag scannán acu (m.sh. Cill phlanda, cill ainmhí, fungais).',
-                    '<strong>Membrane Structure:</strong> Déanta as Sraithe dhúbailte fosphalaipíde le próitéiní leabaithe (Fluid Mosaic Model).',
-                    '<strong>Organelles Key Functions:</strong>',
-                    '&bull; <em>Miteachoindre:</em> Suíomh an riospráide aeróbaigh (Táirgeadh ATP). Tá maoilín DNA laistigh de.',
-                    '&bull; <em>Ríobosóim:</em> Suíomh na sintéise próitéine.',
-                    '&bull; <em>Clóraplaist:</em> Suíomh an fhótasintéise i gcilla phlanda.',
-                    '&bull; <em>Scannán Cille:</em> Rialaíonn sé substaintí ag dul isteach agus amach (Rogh-theachtach).'
-                ],
-                keyPointsEn: [
-                    '<strong>Prokaryotic Cells:</strong> Do not have a membrane-bound nucleus or membrane-bound organelles (e.g., Bacteria).',
-                    '<strong>Eukaryotic Cells:</strong> Have a membrane-bound nucleus and organelles (e.g., Plant cells, Animal cells, Fungi).',
-                    '<strong>Membrane Structure:</strong> Phospholipid bilayer with embedded proteins (Fluid Mosaic Model).',
-                    '<strong>Key Organelles:</strong>',
-                    '&bull; <em>Mitochondria:</em> Site of aerobic respiration (ATP production). Contains its own DNA.',
-                    '&bull; <em>Ribosomes:</em> Site of protein synthesis.',
-                    '&bull; <em>Chloroplasts:</em> Site of photosynthesis in plant cells.',
-                    '&bull; <em>Cell Membrane:</em> Controls entry and exit of substances (Selectively permeable).'
-                ]
-            },
-            {
-                id: 'ch-microscopy',
-                titleGa: 'Caibidil 2.2: Struchtúr Cille & Micreascópacht',
-                titleEn: 'Chapter 2.2: Cell Structure & Microscopy',
-                subtitle: 'Practical Preparation & Magnification',
-                keyPointsGa: [
-                    '<strong>Staining Cells:</strong> Usáidtear <em>Iaidín (Iodine)</em> le haghaidh cealla planda (Loinniú) agus <em>Gorm Meitiléine (Methylene Blue)</em> le haghaidh cealla ainmhithe (cealla leicne).',
-                    '<strong>Light Microscope (Micreascóp Solais):</strong> Úsáideann sé solas agus lionsaí glasa. Sroicheann sé zúmáil suas le x1000.',
-                    '<strong>Electron Microscope (Micreascóp Leictreoin):</strong> Úsáideann sé pónairí leictreon le haghaidh taifeach ard (TEM & SEM). Is féidir ultrastruchtúr na cille a fheiceáil.',
-                    '<strong>Coirt Chlúdaigh (Coverslip):</strong> Cuirtear i bhfeidhm é ag uillinn 45 grád le snáthaid ghléasta chun boilgeoga aeir a chosc.'
-                ],
-                keyPointsEn: [
-                    '<strong>Cell Staining:</strong> Use <em>Iodine</em> to stain plant cells (Onion cells) and <em>Methylene Blue</em> to stain animal cheek cells.',
-                    '<strong>Light Microscope:</strong> Uses light and glass lenses. Magnifies up to x1000.',
-                    '<strong>Electron Microscope:</strong> Uses electron beams to view cell ultrastructure (TEM = Transmission, SEM = Scanning).',
-                    '<strong>Coverslip Application:</strong> Lowered at a 45° angle with a mounting needle to avoid trapping air bubbles.'
-                ]
-            },
-            {
-                id: 'ch-enzymes',
-                titleGa: 'Caibidil 2.3: Meitibileacht Cille & Einsímí',
-                titleEn: 'Chapter 2.3: Cell Metabolism & Enzymes',
-                subtitle: 'Biocatalysts, Active Site Theory & Immobilisation',
-                keyPointsGa: [
-                    '<strong>Einsím:</strong> Bithchatalaíoch próitéine a ghéaraíonn ráta imoibrithe ceimicigh gan é féin a úsáid.',
-                    '<strong>An Láthair Ghníomhach (Active Site):</strong> An chuid den einsím a nascann leis an tsubstaint (Múnla Oiriúnaithe Ghníomhaigh / Induced Fit Model).',
-                    '<strong>Dínádúrú (Denaturation):</strong> Cailliúint crutha trithoiseach na heinsíme ionas nach féidir léi feidhmiú a thuilleadh (mar gheall ar theocht ard nó pH mí-oiriúnach).',
-                    '<strong>Einsímí Inslithe (Immobilised Enzymes):</strong> Einsímí atá ceangailte nó faoi ghlas i n-ábhar neamhghníomhach (M.sh., Ailgináit Sodiama le haghaidh Giosta). Athúsáidte go héasca ar scála tionsclaíoch.'
-                ],
-                keyPointsEn: [
-                    '<strong>Enzyme:</strong> A biological protein catalyst that speeds up chemical reactions without being used up.',
-                    '<strong>Active Site:</strong> The specific region of the enzyme that binds to the substrate (Induced Fit Model).',
-                    '<strong>Denaturation:</strong> The permanent loss of an enzyme’s 3D shape and function caused by extreme pH or high heat.',
-                    '<strong>Immobilised Enzymes:</strong> Enzymes fixed or trapped in an inert matrix (e.g. Sodium Alginate beads). Benefits: Reusable, pure product, cheap processing.'
-                ]
-            },
-            {
-                id: 'ch-photosynthesis',
-                titleGa: 'Caibidil 2.4: Fótasintéis',
-                titleEn: 'Chapter 2.4: Photosynthesis',
-                subtitle: 'Fótasintéis, Cothromóidí, agus Céimeanna Solais/Dorcha',
-                keyPointsGa: [
-                    '<strong>Cad is fóta-shintéis ann?</strong><br>Is é an fhóta-shintéis an próiseas ina dtáirgeann plandaí glúcós agus ocsaigin ag baint úsáide as dé-ocsaíd charbóin agus uisce i láthair na clóraifille. Próiseas anabalach atá ann toisc go n-úsáideann sé fuinneamh solais chun móilíní níos lú (dé-ocsaíd charbóin agus uisce) a thiontú go móilíní níos mó (glúcós).',
-                    '<strong>Tábhacht na Fóta-shintéise:</strong><br>&bull; Úsáideann plandaí fóta-shintéis chun bia a dhéanamh.<br>&bull; Faigheann ainmhithe a gcuid bia ó phlandaí (ciallaíonn sé seo go mbaineann plandaí agus ainmhithe leas as an bhfóta-shintéis).<br>&bull; Táirgeann an fhóta-shintéis an ocsaigin a theastaíonn ó fhormhór na n-orgánach beo le haghaidh na hanálaithe.<br>&bull; Ba chúis leis an bhfóta-shintéis breoslaí iontaise a fhoirmiú na milliúin bliain ó shin.',
-                    '<strong>Cothromóid na Fóta-shintéise:</strong><br>Is féidir an fhóta-shintéis a léiriú mar chothromóid fhocail agus mar chothromóid cheimiceach araon:<br><em>Cothromóid fhocail:</em> Dé-ocsaíd charbóin + Uisce + Solas &rightarrow; Glúcós + Ocsaigin <em>(clóraifill ag teastáil)</em><br><em>Cothromóid cheimiceach:</em> 6CO₂ + 6H₂O <code>&xrightarrow{\text{Solas / Clóraifill}}</code> C₆H₁₂O₆ + 6O₂<br><strong>Nóta:</strong> Tabhair faoi deara go bhfuil an chothromóid seo cothromaithe – tá 6 adamh carbóin, 12 adamh hidrigine, agus 18 adamh ocsaigine ar gach taobh den chothromóid.',
-                    '<strong>Foinsí na n-imoibreoirí agus na dtáirgí:</strong><br><strong>Na h-imoibreoirí (cad a théann isteach):</strong><br>&bull; <em>Dé-ocsaíd charbóin:</em> Tagann sé ó dhá fhoinse: an t-aer agus an análú.<br>&bull; <em>Uisce:</em> Faightear é nuair a ghlacann fréamhacha uisce isteach ón ithir trí xiléam.<br><strong>Na táirgí (cad a thógann amach):</strong><br>&bull; <em>Glúcós:</em> Foirmítear é nuair a chumascann adaimh charbóin agus ocsaigine ó dhé-ocsaíd charbóin le híain hidrigine a tháirgtear nuair a scartáiltear uisce (fótashilt).<br>&bull; <em>Ocsaigin:</em> Foirmítear é nuair a scartáiltear uisce.',
-                    '<strong>Áit a dtarlaíonn an fhóta-shintéis:</strong><br>Tarlaíonn an fhóta-shintéis i gclóraplaist, ar orgánaidí beaga iad a bhfuil an lí glas ar a dtugtar clóraifill iontu (go príomha i duilleoga).',
-                    '<strong>Próiseas dhá chéim na fóta-shintéise:</strong><br>&bull; <strong>Frithghníomhartha a bhraitheann ar an solas (Céim an tsolais):</strong> Braitheann siad ar an solas (ní féidir leis tarlú sa dorchadas); soláthraíonn an solas an fuinneamh.<br>&bull; <strong>Frithghníomhartha neamhspleácha solais (An chéim dorcha):</strong> Neamhspleách ar an solas; soláthraíonn ATP an fuinneamh; rialaíonn einsímí na frithghníomhartha.',
-                    '<strong>Frithghníomhartha a bhraitheann ar an solas (Céim an tsolais):</strong><br>Tarlaíonn i gcarnanna de scannáin chomhréidhe ar a dtugtar tílacóidí sa chlóraplaist (granam). Cuimsíonn sé súchán an tsolais, aistriú fuinnimh chuig leictreoin, an slabhra iompair leictreon (fótashilt, sintéis ATP, foirmiú NADPH), agus an chonair chiorclach.',
-                    '<strong>Frithghníomhartha neamhspleácha solais (An chéim dorcha / Timthriakal Calvin):</strong><br>Tarlaíonn iad sa stróma, rialaithe le hinsímí (Timthriakal Calvin), áit a n-úsáidtear ATP agus NADPH ó chéim an tsolais chun dé-ocsaíd charbóin a thiontú ina ghlúcós.',
-                    '<strong>Fachtóirí a imríonn tionchar ar ráta na fóta-shintéise:</strong><br>&bull; Dianstoleracht an tsolais<br>&bull; An teocht<br>&bull; Tiúchan dé-ocsaíd charbóin'
-                ],
-                keyPointsEn: [
-                    '<strong>What is photosynthesis?</strong> Photosynthesis is the process by which plants produce glucose and oxygen using carbon dioxide and water in the presence of chlorophyll.',
-                    '<strong>Importance of Photosynthesis:</strong> Plants make food, support food chains, produce oxygen for respiration, and formed fossil fuels.',
-                    '<strong>Equation:</strong> 6CO₂ + 6H₂O + Light &rightarrow; C₆H₁₂O₆ + 6O₂',
-                    '<strong>Sources of Reactants and Products:</strong> CO₂ from air/respiration, Water from soil via xylem; Glucose used for energy/stored as starch, Oxygen released via stomata.',
-                    '<strong>Where it takes place:</strong> Chloroplasts containing chlorophyll, primarily in leaves.',
-                    '<strong>Two-Step Process:</strong> Light-dependent reactions (light phase) and Light-independent reactions (dark phase/Calvin cycle).'
-                ]
-            },
-            {
-                id: 'ch-respiration',
-                titleGa: 'Caibidil 2.5: Riospráid Cille (Respiration)',
-                titleEn: 'Chapter 2.5: Cellular Respiration',
-                subtitle: 'Glycolysis, Krebs Cycle & Anaerobic Pathways',
-                keyPointsGa: [
-                    '<strong>Riospráid Aeróbach:</strong> An briseadh síos de ghlúcós i láthair ocsaigine chun ATP a chruthú.',
-                    '<strong>Glíocólú (Glycolysis):</strong> Céim 1. Tarlóíonn sé sa Chiotósól. Neamh-aeróbach. Bristear Glúcós (6C) go dtí 2 Phíorúváit (3C) agus +2 ATP ghlan.',
-                    '<strong>Céim 2 (Krebs Cycle):</strong> Tarlóíonn sé sa Mhaitrís Miteachoindreach. Athraítear Píorúváit go Aicéitil-CoA. Táirgtear CO₂, H⁺, leictreoin, agus ATP.',
-                    '<strong>Riospráid Neamhaeróbach (Aiseag):</strong>',
-                    '&bull; <em>I Matáin:</em> Glúcós ➔ Aigéad Lachtach (Lactic acid).',
-                    '&bull; <em>I nGiosta:</em> Glúcós ➔ Eatánól + CO₂.'
-                ],
-                keyPointsEn: [
-                    '<strong>Aerobic Respiration:</strong> The release of energy from glucose in the presence of oxygen.',
-                    '<strong>Glycolysis:</strong> Stage 1. Occurs in the cytosol. Anaerobic. Splits Glucose (6C) into 2 Pyruvate (3C) molecules, yielding a net 2 ATP.',
-                    '<strong>Stage 2 (Krebs Cycle):</strong> Occurs in mitochondrial matrix. Pyruvate converted to Acetyl-CoA. Releases CO₂, ATP, and high-energy electrons (NADH).',
-                    '<strong>Anaerobic Respiration (Fermentation):</strong>',
-                    '&bull; <em>In Animals/Lactic Acid:</em> Glucose ➔ Lactic Acid.',
-                    '&bull; <em>In Yeast:</em> Glucose ➔ Ethanol + CO₂.'
-                ]
-            },
-            {
-                id: 'ch-osmosis',
-                titleGa: 'Caibidil 2.6: Idirleathadh & Osmóis',
-                titleEn: 'Chapter 2.6: Diffusion & Osmosis',
-                subtitle: 'Movement of Molecules, Turgor & Plasmolysis',
-                keyPointsGa: [
-                    '<strong>Idirleathadh (Diffusion):</strong> Gluaiseacht mhóilíní ó réigiún le tiúchan ard go réigiún le tiúchan íseal (pasach).',
-                    '<strong>Osmóis (Osmosis):</strong> Gluaiseacht mhóilíní uisce ó thiúchan ard uisce go tiúchan íseal uisce trí scannán atá rogh-theachtach.',
-                    '<strong>Brú Turgair (Turgor Pressure):</strong> An brú amach a dhéanann an vacúil agus an ciotoplásm i gcoinne bhalla cille phlanda.',
-                    '<strong>Plasmalaíocht (Plasmolysis):</strong> Shrapadh an chiotoplásm ó bhalla na cille nuair a chuirtear cill phlanda i dtuaslagán salainn nó siúcra ardfhócasaithe.'
-                ],
-                keyPointsEn: [
-                    '<strong>Diffusion:</strong> The passive movement of molecules from a region of high concentration to low concentration.',
-                    '<strong>Osmosis:</strong> The movement of water molecules from a region of high water concentration to low water concentration across a semi-permeable membrane.',
-                    '<strong>Turgor Pressure:</strong> Outward pressure exerted by the cytoplasm and vacuole against the plant cell wall.',
-                    '<strong>Plasmolysis:</strong> Shrinking of the cytoplasm away from the cell wall when placed in a hypertonic (salty/concentrated) solution.'
-                ]
-            },
-            {
-                id: 'ch-celldivision',
-                titleGa: 'Caibidil 2.7: Deighilt Cille (Mitosis & Meiosis)',
-                titleEn: 'Chapter 2.7: Cell Division',
-                subtitle: 'Mitosis, Cancer & Meiotic Division',
-                keyPointsGa: [
-                    '<strong>Mitóis (Mitosis):</strong> Deighilt núicléach ina bhfuil dhá iníonchill a dhéantar gach ceann le líon crómasóim comhionann leis an máthairchill (2n ➔ 2n).',
-                    '<strong>Céim Mitóise (PMAT):</strong> Prophase, Metaphase, Anaphase, Telophase.',
-                    '<strong>Ailse (Cancer):</strong> Aon ghalar a bhfuil deighilt cille neamhrialaithe (mitóis gan smacht) mar chúis leis.',
-                    '<strong>Meióis (Meiosis):</strong> Deighilt núicléach a tháirgeann ceithre iníonchill atá difriúil go géiniteach le leath an líon crómasóim (2n ➔ n) chun gaiméití a chruthú.'
-                ],
-                keyPointsEn: [
-                    '<strong>Mitosis:</strong> Form of nuclear division where one cell divides to form 2 genetically identical daughter cells with the same chromosome number (2n ➔ 2n).',
-                    '<strong>Stages of Mitosis (PMAT):</strong> Prophase, Metaphase, Anaphase, Telophase.',
-                    '<strong>Cancer:</strong> Group of disorders characterized by uncontrolled mitotic division forming tumors.',
-                    '<strong>Meiosis:</strong> Nuclear division producing 4 genetically unique haploid daughter cells (2n ➔ n) for gamete formation.'
-                ]
-            },
-            {
-                id: 'ch-dna',
-                titleGa: 'Caibidil 2.8: DNA, RNA & Sintéise Próitéine',
-                titleEn: 'Chapter 2.8: DNA, RNA & Protein Synthesis',
-                subtitle: 'Nucleotides, Replication, Transcription & Translation',
-                keyPointsGa: [
-                    '<strong>Bonn-phéirí DNA:</strong> Aitéinín (A) le Thímín (T), Guainín (G) le Cítosín (C). I RNA, tagann Urasail (U) in ionad T.',
-                    '<strong>Sintéise Próitéine:</strong>',
-                    '&bull; <em>Tulaibriú (Transcription):</em> Sintéisiú mRNA i núicléas na cille ag úsáid DNA mar theimpléad.',
-                    '&bull; <em>Aistriúchán (Translation):</em> Códaítear seicheamh aimínoigéid ag na ríobosóim trí úsáid a bhaint as tRNA mar iompróir aimínoigéid.'
-                ],
-                keyPointsEn: [
-                    '<strong>DNA Base Pairing:</strong> Adenine (A) pairs with Thymine (T), Guanine (G) pairs with Cytosine (C). In RNA, Uracil (U) replaces T.',
-                    '<strong>Protein Synthesis Steps:</strong>',
-                    '&bull; <em>Transcription:</em> Copying the genetic code from DNA onto mRNA in the nucleus.',
-                    '&bull; <em>Translation:</em> Decoding mRNA at the ribosome using tRNA to assemble amino acids into a polypeptide chain.'
-                ]
-            },
-            {
-                id: 'ch-genetics',
-                titleGa: 'Caibidil 2.9: Dlíthe Oidhreachtúlachta & Géineolaíocht',
-                titleEn: 'Chapter 2.9: Genetic Crosses & Heredity',
-                subtitle: 'Mendel’s Laws, Monohybrid & Sex Linkage',
-                keyPointsGa: [
-                    '<strong>An Chéad Dlí Mendel (Segregation):</strong> Tá dhá fhachtóir/ailléil ag gach tréith agus scarann siad le linn foirmiú gaiméití.',
-                    '<strong>An Dara Dlí Mendel (Independent Assortment):</strong> Scarann péirí fachtóirí ó chéile go neamhspleách le linn gaiméitigh.',
-                    '<strong>Téarmaí Géiniteacha:</strong> Homozygous (Iníon-aimseartha), Heterozygous (Il-aimseartha), Phenotype (Saintréith chorportha), Genotype (Comhdhéanamh géiniteach).'
-                ],
-                keyPointsEn: [
-                    '<strong>Mendel’s 1st Law (Segregation):</strong> Alleles segregate during gamete formation so each gamete receives only one allele.',
-                    '<strong>Mendel’s 2nd Law (Independent Assortment):</strong> Either member of a pair of alleles can combine randomly with either member of another pair.',
-                    '<strong>Genetic Terms:</strong> Homozygous (identical alleles), Heterozygous (different alleles), Phenotype (physical appearance), Genotype (genetic setup).'
-                ]
-            },
-            {
-                id: 'ch-variation',
-                titleGa: 'Caibidil 2.10: Athrúchán & Éabhlóid (Evolution)',
-                titleEn: 'Chapter 2.10: Variation & Evolution',
-                subtitle: 'Mutations, Natural Selection & Speciation',
-                keyPointsGa: [
-                    '<strong>Athrúchán (Variation):</strong> Sainiúlacht idir baill den speiceas céanna (trí mheióis nó sócháin).',
-                    '<strong>Sóchán (Mutation):</strong> Athrú tobann ar eagrú nó struchtúr DNA/crómasóim.',
-                    '<strong>Roghnaíocht Nádúrtha (Natural Selection):</strong> Teoiric Darwin & Wallace – maireann orgánaigh leis na tréithe is fearr atá oiriúnaithe don timpeallacht agus síolraíonn siad.'
-                ],
-                keyPointsEn: [
-                    '<strong>Variation:</strong> Differences between members of the same species caused by sexual reproduction (meiosis) or mutations.',
-                    '<strong>Mutation:</strong> A sudden change in the amount or structure of DNA/chromosomes.',
-                    '<strong>Natural Selection:</strong> Darwin & Wallace theory – organisms with advantageous traits survive environmental pressures and pass on traits.'
-                ]
-            },
-            {
-                id: 'ch-engineering',
-                titleGa: 'Caibidil 2.11: Innealtóireacht Ghéiniteach',
-                titleEn: 'Chapter 2.11: Genetic Engineering',
-                subtitle: 'Isolation, Cutting, Insertion & Expression',
-                keyPointsGa: [
-                    '<strong>Míniú:</strong> Athrú ghnóthachtáil ghéiniteach orgánaigh trí ghéinte a ionramháil.',
-                    '<strong>Céimeanna Innealtóireachta:</strong> Isolation ➔ Cutting (Einsímí Rianaithe) ➔ Insertion (Plaismid DNA) ➔ Transformation ➔ Expression.',
-                    '<strong>Feidhmeanna:</strong> Táirgeadh Inslin i mbaictéir, barra atá frithsheasmhach in aghaidh feithidí.'
-                ],
-                keyPointsEn: [
-                    '<strong>Definition:</strong> Artificial manipulation and alteration of genes within an organism.',
-                    '<strong>Steps:</strong> Isolation ➔ Cutting (Restriction Enzymes) ➔ Insertion (Plasmid Vectors) ➔ Transformation ➔ Expression.',
-                    '<strong>Applications:</strong> Human insulin production using bacteria, pest-resistant crops.'
-                ]
-            }
-        ];
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'ga' ? 'en' : 'ga';
-            document.getElementById('lang-label').innerText = currentLang === 'ga' ? 'EN' : 'GA';
-            
-            // Translate static elements with data-i18n
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (i18n[currentLang][key]) {
-                    el.innerText = i18n[currentLang][key];
-                }
-            });
-
-            // Re-render dynamic notes list or active detail view if open
-            renderSubjectNotes();
-            if (window.currentActiveChapterId) {
-                openChapterDetail(window.currentActiveChapterId);
-            }
-        }
-
-        // TAB SWITCHING LOGIC
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-brand-50', 'text-brand-700', 'shadow-sm');
-                el.classList.add('text-slate-600');
-            });
-
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) {
-                activeNav.classList.add('bg-brand-50', 'text-brand-700', 'shadow-sm');
-                activeNav.classList.remove('text-slate-600');
-            }
-
-            if (tabId === 'notes') renderSubjectNotes();
-            if (tabId === 'sec') fetchSecPapersFromSupabase();
-            if (tabId === 'qbank') fetchQuestionsFromSupabase();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // RENDER NOTES LIST (Clicking a card opens its dedicated extra page view)
-        function renderSubjectNotes() {
-            const subject = document.getElementById('notes-subject-select').value;
-            const container = document.getElementById('notes-chapters-container');
-
-            if (subject === 'biology') {
-                document.getElementById('chapters-count-badge').innerText = `${biologyUnit2Data.length} ${currentLang === 'ga' ? 'Caibidil Ar Fáil' : 'Chapters Available'}`;
-                
-                container.innerHTML = biologyUnit2Data.map((item, index) => {
-                    const title = currentLang === 'ga' ? item.titleGa : item.titleEn;
-
-                    return `
-                    <div onclick="openChapterDetail('${item.id}')" class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/85 shadow-sm hover:shadow-md hover:border-brand-400 transition cursor-pointer flex items-center justify-between group">
-                        <div class="flex items-center space-x-4 pr-2">
-                            <span class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-700 flex items-center justify-center font-extrabold text-sm flex-shrink-0 group-hover:bg-brand-600 group-hover:text-white transition">${index + 1}</span>
-                            <div>
-                                <h3 class="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-brand-700 transition">${title}</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">${item.subtitle}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-2 text-xs font-bold text-brand-600 bg-brand-50 px-3 py-2 rounded-xl group-hover:bg-brand-600 group-hover:text-white transition flex-shrink-0">
-                            <span class="hidden sm:inline">${currentLang === 'ga' ? 'Féach ar Nótaí' : 'View Notes'}</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        // OPEN INDIVIDUAL CHAPTER EXTRA PAGE VIEW
-        function openChapterDetail(id) {
-            const chapter = biologyUnit2Data.find(c => c.id === id);
-            if (!chapter) return;
-            window.currentActiveChapterId = id;
-
-            const title = currentLang === 'ga' ? chapter.titleGa : chapter.titleEn;
-            const points = currentLang === 'ga' ? chapter.keyPointsGa : chapter.keyPointsEn;
-
-            document.getElementById('chapter-detail-title').innerText = title;
-            document.getElementById('chapter-detail-subtitle').innerText = chapter.subtitle;
-            document.getElementById('chapter-detail-number').innerText = `${currentLang === 'ga' ? 'Caibidil' : 'Chapter'} — ${id.toUpperCase()}`;
-
-            const pointsContainer = document.getElementById('chapter-detail-points');
-            pointsContainer.innerHTML = points.map(pt => `
-                <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/70 leading-relaxed text-slate-700 text-sm sm:text-base">
-                    ${pt}
-                </div>
-            `).join('');
-
-            // Load saved student notes from localStorage if present
-            const savedNote = localStorage.getItem(`scolaire_note_${id}`) || '';
-            document.getElementById('student-chapter-notes').value = savedNote;
-
-            // Switch view to dedicated chapter detail section
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('tab-chapter-detail').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // SAVE PERSONAL CHAPTER NOTES LOCALLY
-        function saveStudentNotes() {
-            const id = window.currentActiveChapterId;
-            if (!id) return;
-            const text = document.getElementById('student-chapter-notes').value;
-            localStorage.setItem(`scolaire_note_${id}`, text);
-            alert(currentLang === 'ga' ? 'Sábháladh do chuid nótaí go rathúil ar an ngléas seo!' : 'Your personal notes were saved successfully on this device!');
-        }
-
-        // SUPABASE QUESTION BANK FETCHING
-        async function fetchQuestionsFromSupabase() {
-            const subject = document.getElementById('q-subject').value;
-            const search = document.getElementById('q-search').value.toLowerCase();
-            const container = document.getElementById('questions-container');
-
-            let query = _supabase.from('exam_questions').select('*');
-            if (subject !== 'all') query = query.eq('subject', subject);
-
-            const { data, error } = await query;
-
-            if (error) {
-                console.error("Supabase Error:", error);
-                container.innerHTML = `<div class="p-6 bg-red-50 border border-red-200 text-red-600 rounded-2xl text-sm text-center">Níorbh fhéidir ceisteanna a lódáil. Seiceáil an ceangal.</div>`;
-                return;
-            }
-
-            const uniqueQuestions = [];
-            const seenKeys = new Set();
-            (data || []).forEach(item => {
-                const key = `${item.subject}-${item.year}-${item.title}`;
-                if (!seenKeys.has(key)) {
-                    seenKeys.add(key);
-                    uniqueQuestions.push(item);
-                }
-            });
-
-            const filtered = uniqueQuestions.filter(q => 
-                (q.title && q.title.toLowerCase().includes(search)) || 
-                (q.question_text && q.question_text.toLowerCase().includes(search))
-            );
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="p-12 text-center bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-                        <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
-                        <p class="text-sm font-medium text-slate-500">Ní bhfuarthas aon cheist faoin gcritéar seo.</p>
-                    </div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(q => `
-                <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition space-y-3">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-brand-100 text-brand-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-brand-200">${q.subject || ''}</span>
-                            <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-lg">${q.year || ''}</span>
-                            ${q.level ? `<span class="bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-lg">${q.level}</span>` : ''}
-                        </div>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-bold text-slate-900">${q.title || 'Ceist'}</h3>
-                    ${q.question_text ? `<p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${q.question_text}</p>` : ''}
-                    <div class="flex flex-wrap gap-2 pt-2">
-                        ${q.paper_url ? `<a href="${q.paper_url}" target="_blank" class="inline-flex items-center text-xs font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-xl transition"><i class="fa-solid fa-file-pdf mr-1.5"></i> Páipéar PDF</a>` : ''}
-                        ${q.marking_scheme_url ? `<a href="${q.marking_scheme_url}" target="_blank" class="inline-flex items-center text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-2 rounded-xl transition"><i class="fa-solid fa-check-double mr-1.5"></i> Scéim Marcála</a>` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // SUPABASE SEC PAPERS FETCHING
-        async function fetchSecPapersFromSupabase() {
-            const subject = document.getElementById('sec-subject').value;
-            const year = document.getElementById('sec-year').value;
-            const level = document.getElementById('sec-level').value;
-            const list = document.getElementById('sec-list');
-
-            let query = _supabase.from('sec_papers').select('*');
-            if (subject !== 'all') query = query.eq('subject', subject);
-            if (year !== 'all') query = query.eq('year', parseInt(year));
-            if (level !== 'all') query = query.eq('level', level);
-
-            const { data, error } = await query;
-
-            if (error) {
-                console.error("Supabase Error:", error);
-                list.innerHTML = `<div class="col-span-full p-6 bg-red-50 border border-red-200 text-red-600 rounded-2xl text-sm text-center">Níorbh fhéidir páipéir a lódáil.</div>`;
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                list.innerHTML = `
-                    <div class="col-span-full p-12 text-center bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-                        <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
-                        <p class="text-sm font-medium text-slate-500">Ní bhfuarthas aon pháipéar don chritéar seo.</p>
-                    </div>`;
-                return;
-            }
-
-            list.innerHTML = data.map(item => `
-                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-lg border border-brand-200">${item.subject}</span>
-                            <span class="text-xs font-bold text-slate-500">${item.year}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">${item.title || `${item.subject} (${item.level})`}</h4>
-                    </div>
-                    <div class="flex gap-2 pt-2 border-t border-slate-100">
-                        ${item.paper_url ? `<a href="${item.paper_url}" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl transition"><i class="fa-solid fa-file-pdf mr-1 text-red-500"></i> Páipéar</a>` : ''}
-                        ${item.marking_scheme_url ? `<a href="${item.marking_scheme_url}" target="_blank" class="flex-1 text-center bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold py-2 px-3 rounded-xl transition"><i class="fa-solid fa-check mr-1 text-emerald-600"></i> Scéim Marcála</a>` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // CAO POINTS CALCULATOR LOGIC
-        const POINTS_MAP = {
-            HL: { H1: 100, H2: 88, H3: 77, H4: 66, H5: 56, H6: 46, H7: 37, H8: 0, None: 0 },
-            OL: { O1: 56, O2: 46, O3: 37, O4: 28, O5: 20, O6: 12, O7: 0, O8: 0, None: 0 }
-        };
-
-        const DEFAULT_SUBJECTS = [
-            "Matamaitic (Maths)",
-            "Gaeilge",
-            "Béarla (English)",
-            "Bitheolaíocht (Biology)",
-            "Fisic (Physics)",
-            "Ceimic (Chemistry)",
-            "Tíreolaíocht (Geography)",
-            "Stair (History)"
-        ];
-
-        function initCaoCalculator() {
-            const container = document.getElementById('subject-rows');
-            container.innerHTML = DEFAULT_SUBJECTS.map((sub, idx) => `
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                    <span class="text-xs sm:text-sm font-semibold text-slate-700 sm:w-1/3 w-full">${sub}</span>
-                    <div class="flex items-center gap-2 sm:w-2/3 w-full">
-                        <select id="level-${idx}" onchange="calculateCaoPoints()" class="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium outline-none">
-                            <option value="HL">Ardleibhéal (HL)</option>
-                            <option value="OL">Gnáthleibhéal (OL)</option>
-                        </select>
-                        <select id="grade-${idx}" onchange="calculateCaoPoints()" class="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium outline-none">
-                            <option value="None">-- Grád --</option>
-                            <option value="1">1 (80-100%)</option>
-                            <option value="2">2 (70-79%)</option>
-                            <option value="3">3 (60-69%)</option>
-                            <option value="4">4 (50-59%)</option>
-                            <option value="5">5 (40-49%)</option>
-                            <option value="6">6 (30-39%)</option>
-                            <option value="7">7 (0-29%)</option>
-                        </select>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function calculateCaoPoints() {
-            let scores = [];
-            let mathsBonus = 0;
-
-            DEFAULT_SUBJECTS.forEach((sub, idx) => {
-                const level = document.getElementById(`level-${idx}`).value;
-                const gradeVal = document.getElementById(`grade-${idx}`).value;
-
-                if (gradeVal !== 'None') {
-                    const gradeKey = `${level === 'HL' ? 'H' : 'O'}${gradeVal}`;
-                    let points = POINTS_MAP[level][gradeKey] || 0;
-
-                    // HL Maths Bonus (+25 points for H1-H6)
-                    if (idx === 0 && level === 'HL' && parseInt(gradeVal) >= 1 && parseInt(gradeVal) <= 6) {
-                        points += 25;
-                        mathsBonus = 25;
-                    }
-
-                    scores.push(points);
-                }
-            });
-
-            scores.sort((a, b) => b - a);
-            const top6 = scores.slice(0, 6);
-            const total = top6.reduce((sum, val) => sum + val, 0);
-
-            document.getElementById('total-points').innerText = total;
-            document.getElementById('top-6-count').innerText = `${top6.length} / 6 ábhar`;
-            document.getElementById('maths-bonus-text').innerText = `+${mathsBonus}`;
-        }
-
-        // INITIALIZATION
-        window.addEventListener('DOMContentLoaded', () => {
-            initCaoCalculator();
-            renderSubjectNotes();
-            fetchQuestionsFromSupabase();
-        });
-    </script>
 </body>
 </html>
